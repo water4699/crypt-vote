@@ -44,6 +44,13 @@ describe("EncryptedVotingSystem", function () {
     ({ votingSystemContract, votingSystemContractAddress } = await deployFixture());
   });
 
+  it("should initialize voting with options", async function () {
+    const options = ["Option A", "Option B", "Option C"];
+    await votingSystemContract.initializeVoting(options);
+
+    const nextVoteId = await votingSystemContract.getNextVoteId();
+    expect(nextVoteId).to.equal(2); // Should be incremented after creating vote
+  });
 
     const optionCount = await votingSystemContract.getOptionCount();
     expect(optionCount).to.eq(3);
