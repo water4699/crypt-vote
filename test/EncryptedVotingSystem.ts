@@ -112,6 +112,49 @@ describe("EncryptedVotingSystem", function () {
     expect(totalVotes).to.eq(3);
   });
 
+  it("should provide voting statistics for vote analytics", async function () {
+    const options = ["Option A", "Option B"];
+    await votingSystemContract.initializeVoting(options);
+
+    // Alice votes for option 0
+    await votingSystemContract.connect(signers.alice).castVote(0, "0x00");
+
+    // Bob votes for option 1
+    await votingSystemContract.connect(signers.bob).castVote(1, "0x00");
+
+    const [totalVotes, uniqueVoters, isActive] = await votingSystemContract.getVoteStatistics(0);
+
+    expect(totalVotes).to.equal(2);
+    expect(uniqueVoters).to.equal(2);
+    expect(isActive).to.be.true;
+  });
+
+  it("should support batch voting for multiple vote submissions", async function () {
+    const options = ["Option A", "Option B", "Option C"];
+    await votingSystemContract.initializeVoting(options);
+
+    // Create encrypted votes for batch submission
+    const encryptedVote0 = await fhevm
+      .createEncryptedInput(votingSystemContractAddress, signers.alice.address)
+      .add32(0)
+      .encrypt();
+
+    const encryptedVote1 = await fhevm
+      .createEncryptedInput(votingSystemContractAddress, signers.bob.address)
+      .add32(1)
+      .encrypt();
+
+    // Batch cast votes
+    await votingSystemContract.connect(signers.alice).batchCastVotes(
+      [0, 0], // Same vote ID
+      [encryptedVote0.handles[0], encryptedVote1.handles[0]],
+      [encryptedVote0.inputProof, encryptedVote1.inputProof]
+    );
+
+    const totalVotes = await votingSystemContract.getTotalVotes();
+    expect(totalVotes).to.eq(2);
+  });
+
   it("should record daily study time and accumulate total study time", async function () {
     // Encrypt study time (30 minutes) as a euint32
     const studyMinutes = 30;
