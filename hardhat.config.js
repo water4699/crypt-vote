@@ -30,6 +30,8 @@ const config = {
   gasReporter: {
     currency: "USD",
     enabled: process.env.REPORT_GAS ? true : false,
+    // FHE-specific gas reporting optimizations
+    excludeContracts: [],
     excludeContracts: [],
   },
   networks: {
