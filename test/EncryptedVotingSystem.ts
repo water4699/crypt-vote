@@ -155,6 +155,48 @@ describe("EncryptedVotingSystem", function () {
     expect(totalVotes).to.eq(2);
   });
 
+  it("should validate voting options within valid range", async function () {
+    const options = ["Option A", "Option B", "Option C"];
+    await votingSystemContract.initializeVoting(options);
+
+    expect(await votingSystemContract.validateVoteOption(0, 0)).to.be.true; // Valid option
+    expect(await votingSystemContract.validateVoteOption(0, 2)).to.be.true; // Valid option
+    expect(await votingSystemContract.validateVoteOption(0, 3)).to.be.false; // Invalid option
+  });
+
+  it("should calculate participation rate for voting analytics", async function () {
+    const options = ["Yes", "No"];
+    await votingSystemContract.initializeVoting(options);
+
+    // Cast some votes
+    await votingSystemContract.connect(signers.alice).castVote(0, "0x00");
+    await votingSystemContract.connect(signers.bob).castVote(1, "0x00");
+
+    const [participationRate, actualVotes] = await votingSystemContract.getParticipationRate(0, 10);
+
+    expect(actualVotes).to.equal(2);
+    expect(participationRate).to.equal(20); // 2/10 * 100 = 20%
+  });
+
+  it("should support batch vote initialization for multiple votes", async function () {
+    const titles = ["Vote 1", "Vote 2"];
+    const descriptions = ["Description 1", "Description 2"];
+    const optionsList = [["A", "B"], ["X", "Y", "Z"]];
+    const startTimes = [Math.floor(Date.now() / 1000), Math.floor(Date.now() / 1000) + 100];
+    const endTimes = [Math.floor(Date.now() / 1000) + 3600, Math.floor(Date.now() / 1000) + 3700];
+
+    await votingSystemContract.batchInitializeVotes(
+      titles,
+      descriptions,
+      optionsList,
+      startTimes,
+      endTimes
+    );
+
+    const nextVoteId = await votingSystemContract.getNextVoteId();
+    expect(nextVoteId).to.equal(3); // Started from 1, added 2 more
+  });
+
   it("should record daily study time and accumulate total study time", async function () {
     // Encrypt study time (30 minutes) as a euint32
     const studyMinutes = 30;
