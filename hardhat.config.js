@@ -108,6 +108,7 @@ const config = {
   typechain: {
     outDir: "types",
     target: "ethers-v6",
+    // FHE-specific typechain optimizations
   },
 };
 
