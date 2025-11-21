@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useEncryptedVotingSystem } from "../hooks/useEncryptedVotingSystem";
 import { useAccount, useChainId } from "wagmi";
 import { EncryptedVotingSystemAddresses } from "../abi/EncryptedVotingSystemAddresses";
@@ -8,6 +9,7 @@ import { EncryptedVotingSystemAddresses } from "../abi/EncryptedVotingSystemAddr
 export const EncryptedVotingDemo = () => {
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
+  const [validationError, setValidationError] = useState<string | null>(null);
   
   // Get contract address based on current chain
   // Priority: chain-specific address > environment variable > default localhost
