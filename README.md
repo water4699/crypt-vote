@@ -5,7 +5,7 @@ A privacy-preserving voting platform built with FHEVM (Fully Homomorphic Encrypt
 ## 🔗 Links
 
 - **📹 Demo Video**: [Watch on GitHub](https://github.com/BurnellDavy/crypto-ballot-vault/blob/main/crypt-vote.mp4)
-- **🌐 Live Demo**: [View on Vercel](https://crypto-vote-two.vercel.app/)
+- **🌐 Live Demo**: [View on Vercel](https://crypt-vote.vercel.app/)
 
 ## Features
 
