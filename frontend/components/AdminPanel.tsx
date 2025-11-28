@@ -9,7 +9,7 @@ export const AdminPanel = () => {
   const [isInitializing, setIsInitializing] = useState<boolean>(false);
   const [isResetting, setIsResetting] = useState<boolean>(false);
 
-  const { initializeVoting, resetVoting, contractAddress } = useEncryptedVotingSystem();
+  const { initializeVoting, contractAddress } = useEncryptedVotingSystem();
 
   const handleInitializeVoting = async () => {
     if (candidateOptions.length < 2) {
@@ -22,9 +22,9 @@ export const AdminPanel = () => {
       await initializeVoting(candidateOptions);
       alert("投票初始化成功！");
       setCandidateOptions([]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("初始化投票失败:", error);
-      alert(`初始化投票失败: ${error.message}`);
+      alert(`初始化投票失败: ${error instanceof Error ? error.message : '未知错误'}`);
     } finally {
       setIsInitializing(false);
     }
@@ -40,9 +40,9 @@ export const AdminPanel = () => {
       // 这里需要实现resetVoting函数调用
       // await resetVoting();
       alert("投票重置成功！");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("重置投票失败:", error);
-      alert(`重置投票失败: ${error.message}`);
+      alert(`重置投票失败: ${error instanceof Error ? error.message : '未知错误'}`);
     } finally {
       setIsResetting(false);
     }

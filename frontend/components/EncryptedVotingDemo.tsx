@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useEncryptedVotingSystem, Vote, VoteResult } from "../hooks/useEncryptedVotingSystem";
+import { useEncryptedVotingSystem } from "../hooks/useEncryptedVotingSystem";
 import { useAccount } from "wagmi";
 
 export const EncryptedVotingDemo = () => {
@@ -9,7 +9,6 @@ export const EncryptedVotingDemo = () => {
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
   const {
     votes,
-    currentVote,
     userVotes,
     decryptedResults,
     decryptedUserVotes,
