@@ -28,6 +28,7 @@ interface UseEncryptedVotingSystemState {
   currentVote: Vote | null;
   userVotes: Record<number, string>; // voteId -> encrypted handle
   decryptedResults: Record<number, VoteResult[]>; // voteId -> results
+  decryptedUserVotes: Record<number, number>; // voteId -> decrypted vote option
   isLoading: boolean;
   message: string | undefined;
   createVote: (title: string, description: string, options: string[], durationDays: number) => Promise<number>;
@@ -175,7 +176,7 @@ export function useEncryptedVotingSystem(contractAddress: string | undefined): U
         const voteCreatedEvent = receipt.logs.find((log: any) => {
           try {
             const parsed = contract.interface.parseLog(log);
-            return parsed.name === 'VoteCreated';
+            return parsed && parsed.name === 'VoteCreated';
           } catch {
             return false;
           }
@@ -184,7 +185,13 @@ export function useEncryptedVotingSystem(contractAddress: string | undefined): U
         let voteId: number;
         if (voteCreatedEvent) {
           const parsed = contract.interface.parseLog(voteCreatedEvent);
-          voteId = Number(parsed.args.voteId);
+          if (parsed) {
+            voteId = Number(parsed.args.voteId);
+          } else {
+            // Fallback: get next vote ID (should be current - 1)
+            const nextId = await contract.getNextVoteId();
+            voteId = Number(nextId) - 1;
+          }
         } else {
           // Fallback: get next vote ID (should be current - 1)
           const nextId = await contract.getNextVoteId();
@@ -287,7 +294,7 @@ export function useEncryptedVotingSystem(contractAddress: string | undefined): U
         // Update user votes
         setUserVotes(prev => ({
           ...prev,
-          [voteId]: encryptedOptionHandle
+          [voteId]: ethers.hexlify(encryptedOptionHandle)
         }));
 
         // Refresh vote data
@@ -347,7 +354,7 @@ export function useEncryptedVotingSystem(contractAddress: string | undefined): U
         setMessage("Decrypting voting results...");
 
         // Prepare handle-contract pairs for all encrypted votes
-        const handleContractPairs = encryptedVotes.map((encryptedVote) => ({
+        const handleContractPairs = encryptedVotes.map((encryptedVote: any) => ({
           handle: ethers.hexlify(encryptedVote),
           contractAddress: contractAddress as `0x${string}`
         }));

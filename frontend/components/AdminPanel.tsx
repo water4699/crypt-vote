@@ -9,7 +9,8 @@ export const AdminPanel = () => {
   const [isInitializing, setIsInitializing] = useState<boolean>(false);
   const [isResetting, setIsResetting] = useState<boolean>(false);
 
-  const { initializeVoting, contractAddress } = useEncryptedVotingSystem();
+  const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x98D6225AAfEa695d236B17F17cea4c401B03951D";
+  const { createVote } = useEncryptedVotingSystem(contractAddress);
 
   const handleInitializeVoting = async () => {
     if (candidateOptions.length < 2) {
@@ -19,12 +20,16 @@ export const AdminPanel = () => {
 
     setIsInitializing(true);
     try {
-      await initializeVoting(candidateOptions);
-      alert("投票初始化成功！");
+      const title = `Admin Vote ${new Date().toLocaleDateString()}`;
+      const description = "管理员创建的投票";
+      const durationDays = 7; // 默认7天
+
+      await createVote(title, description, candidateOptions, durationDays);
+      alert("投票创建成功！");
       setCandidateOptions([]);
     } catch (error: unknown) {
-      console.error("初始化投票失败:", error);
-      alert(`初始化投票失败: ${error instanceof Error ? error.message : '未知错误'}`);
+      console.error("创建投票失败:", error);
+      alert(`创建投票失败: ${error instanceof Error ? error.message : '未知错误'}`);
     } finally {
       setIsInitializing(false);
     }
