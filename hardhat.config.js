@@ -68,11 +68,16 @@ const config = {
       url: "http://localhost:8545",
     },
     sepolia: {
-      accounts: [
-        "0x" + "742a20f19d8776d8af6eff10fd9ee16ef167843b02af93003c33ef300c308d9d"
-      ],
+      accounts: {
+        mnemonic: MNEMONIC,
+      },
       chainId: 11155111,
-      url: `https://sepolia.infura.io/v3/b18fb7e6ca7045ac83c41157ab93f990`,
+      url: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
+      // Enable FHEVM for Sepolia testnet
+      fhevm: {
+        protocol: "fhevm",
+        version: "1.0",
+      },
     },
   },
   paths: {
