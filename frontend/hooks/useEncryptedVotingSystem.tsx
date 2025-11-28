@@ -447,6 +447,7 @@ export function useEncryptedVotingSystem(contractAddress: string | undefined): U
 
         // Generate VoteResult array
         const results: VoteResult[] = Object.entries(voteCounts).map(([optionId, count]) => ({
+          voteId,
           optionId: Number(optionId),
           count: Number(count)
         }));
