@@ -1,20 +1,21 @@
-# Encrypted Study Tracker
+# Encrypted Voting System
 
-A privacy-preserving learning time tracking application built with FHEVM (Fully Homomorphic Encryption Virtual Machine) technology. Users can record their daily study time in encrypted form, and view both daily and total accumulated study time through secure decryption.
+A privacy-preserving voting platform built with FHEVM (Fully Homomorphic Encryption Virtual Machine) technology. Users can cast their votes in encrypted form, ensuring complete privacy while maintaining the integrity of the voting process.
 
 ## Features
 
-- **Privacy-Preserving**: Study time data is encrypted using FHEVM, ensuring user privacy
-- **Encrypted Operations**: Time accumulation happens in encrypted form using homomorphic addition
-- **Secure Decryption**: Users can decrypt their own study time data securely
-- **Multi-User Support**: Each user's data is kept separate and private
+- **Privacy-Preserving**: Votes are encrypted using FHEVM, ensuring voter privacy
+- **Encrypted Operations**: Vote tallying happens in encrypted form using homomorphic operations
+- **Secure Voting**: Users can cast votes securely without revealing their choices
+- **Multi-User Support**: Each voter's choice is kept completely private
 - **Modern UI**: Built with Next.js, React, and Tailwind CSS
 - **Wallet Integration**: RainbowKit wallet integration for easy connection
+- **Real-time Results**: Live vote counting and result visualization
 
 ## Architecture
 
 ### Smart Contracts
-- `EncryptedStudyTracker.sol`: Main contract handling encrypted study time recording and decryption
+- `EncryptedVotingSystem.sol`: Main contract handling encrypted vote casting and result aggregation
 - Uses FHEVM for fully homomorphic encryption operations
 
 ### Frontend
@@ -22,6 +23,7 @@ A privacy-preserving learning time tracking application built with FHEVM (Fully 
 - RainbowKit for wallet connection
 - Custom hooks for FHEVM operations
 - Responsive design with Tailwind CSS
+- Real-time vote result visualization
 
 ## Prerequisites
 
@@ -53,6 +55,9 @@ npm run local-node
 # In another terminal, deploy contracts
 npm run deploy-local
 
+# Initialize voting with default options (admin only)
+npm run setup-voting
+
 # Start frontend development server (in another terminal)
 npm run frontend-dev
 ```
@@ -60,26 +65,67 @@ npm run frontend-dev
 #### Option B: Sepolia Testnet (Production-like environment)
 ```bash
 # Set your environment variables
-export INFURA_API_KEY="b18fb7e6ca7045ac83c41157ab93f990"
+export INFURA_API_KEY="your_infura_api_key"
+export PRIVATE_KEY="your_private_key"
 
 # Deploy to Sepolia testnet
 npm run deploy-sepolia
 
+# Initialize voting with default options (admin only)
+npm run setup-voting
+
 # Start frontend (will connect to Sepolia)
 cd frontend && npm run dev
+```
+
+#### Option C: Custom Voting Options
+```bash
+# For custom voting options, use:
+npm run setup-voting:custom "Option 1" "Option 2" "Option 3"
 ```
 
 ### 3. Access the Application
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+### Quick Start (Automated)
+
+For a faster setup experience, use the automated startup script:
+
+**Windows:**
+```bash
+./start-dev.bat
+```
+
+**Linux/Mac:**
+```bash
+./start-dev.sh
+```
+
+This will automatically:
+- Start the Hardhat node
+- Deploy contracts
+- Initialize voting with default options
+- Start the frontend server
+
+### Data Persistence Note
+
+⚠️ **Important**: The local Hardhat network resets all data when restarted. This means:
+
+- **Voting data is lost** when you stop the Hardhat node
+- **You must re-initialize voting** after each restart
+- **Contract addresses stay the same** but state is cleared
+
+For production deployments, use Sepolia testnet or mainnet where data persists.
+
 ### 4. Connect Wallet and Test
 
 1. Click "Connect Wallet" to connect your wallet
    - **Local Development**: Use any account from Hardhat node (has 10,000 ETH)
    - **Sepolia Testnet**: Use MetaMask with Sepolia network (needs test ETH)
-2. Enter study time in minutes and click "Record Study Time"
-3. Click "Decrypt Daily Time" or "Decrypt Total Time" to view your study data
+2. Select your preferred voting option from the available choices
+3. Click "Cast Vote" to submit your encrypted vote
+4. View real-time voting results and statistics
 
 ### 5. Network Information
 
@@ -150,7 +196,7 @@ npm run lint
 npm run test
 
 # Run specific test file
-npx hardhat test test/EncryptedStudyTracker.ts
+npx hardhat test test/EncryptedVotingSystem.ts
 
 # Run Sepolia tests
 npm run test:sepolia
@@ -159,50 +205,56 @@ npm run test:sepolia
 ### Manual Testing Tasks
 
 ```bash
-# Record study time
-npx hardhat --network localhost task:study-record --minutes 30
+# Initialize voting with options
+npx hardhat --network localhost task:vote-init --options "Option A,Option B,Option C"
 
-# Decrypt daily study time
-npx hardhat --network localhost task:study-decrypt-daily
+# Cast a vote
+npx hardhat --network localhost task:vote-cast --option 0
 
-# Decrypt total study time
-npx hardhat --network localhost task:study-decrypt-total
+# Show voting results
+npx hardhat --network localhost task:vote-results
 
-# Show study information
-npx hardhat --network localhost task:study-info
+# Check voting status
+npx hardhat --network localhost task:vote-status
 ```
 
 ## Contract Addresses
 
 ### Local Network (Hardhat)
-- EncryptedStudyTracker: Check `deployments/localhost/EncryptedStudyTracker.json`
+- EncryptedVotingSystem: Check `deployments/localhost/EncryptedVotingSystem.json`
 
 ### Sepolia Testnet
-- EncryptedStudyTracker: Check `deployments/sepolia/EncryptedStudyTracker.json` (after deployment)
+- EncryptedVotingSystem: Check `deployments/sepolia/EncryptedVotingSystem.json` (after deployment)
 
 ## How It Works
 
-1. **Recording Study Time**:
-   - User enters study time in minutes
-   - Time is encrypted using FHEVM before sending to contract
-   - Contract stores encrypted daily and total study time
+1. **Initializing Voting**:
+   - Administrator sets up voting options and parameters
+   - Voting period is established with start and end times
+   - Contract is configured for the specific election or poll
 
-2. **Time Accumulation**:
-   - Daily time resets each day (based on block timestamp)
-   - Total time accumulates all study sessions
-   - All operations happen in encrypted form
+2. **Casting Votes**:
+   - Voters select their preferred option
+   - Vote is encrypted using FHEVM before transmission
+   - Contract stores encrypted votes and updates tally
 
-3. **Viewing Study Data**:
-   - Users can decrypt their own study time data
-   - Decryption happens client-side using FHEVM
-   - Only the user can see their decrypted data
+3. **Vote Aggregation**:
+   - Votes are tallied in encrypted form using homomorphic operations
+   - Real-time results can be computed without decrypting individual votes
+   - Privacy is maintained throughout the process
+
+4. **Viewing Results**:
+   - Aggregated results are available for public viewing
+   - Individual votes remain encrypted and private
+   - Results are computed homomorphically
 
 ## Security Features
 
-- **Fully Homomorphic Encryption**: All computations happen on encrypted data
-- **User Isolation**: Each user's data is completely separate
-- **Client-Side Decryption**: Users decrypt their own data locally
-- **Zero-Knowledge**: Contract cannot see actual study time values
+- **Fully Homomorphic Encryption**: All vote computations happen on encrypted data
+- **Voter Privacy**: Individual votes cannot be viewed or traced
+- **Tamper Resistance**: Encrypted votes cannot be modified once cast
+- **Verifiable Results**: Vote totals can be verified without revealing individual choices
+- **Zero-Knowledge**: Contract cannot see actual vote values
 
 ## Development
 

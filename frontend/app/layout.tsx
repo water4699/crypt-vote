@@ -5,10 +5,10 @@ import Image from "next/image";
 import { EnglishConnectButton } from "../components/EnglishConnectButton";
 
 export const metadata: Metadata = {
-  title: "Encrypted Study Tracker",
-  description: "Privacy-preserving learning time tracking with FHEVM",
+  title: "Encrypted Voting System",
+  description: "Privacy-preserving voting platform with FHEVM",
   icons: {
-    icon: "/study-tracker-logo.svg",
+    icon: "/study-tracker-logo.svg", // TODO: Update to voting logo
   },
 };
 
@@ -28,13 +28,13 @@ export default async function RootLayout({
                 <div className="flex items-center gap-3">
                   <Image
                     src="/study-tracker-logo.svg"
-                    alt="Study Tracker Logo"
+                    alt="Voting System Logo"
                     width={48}
                     height={48}
                     className="rounded-lg"
                   />
                   <div>
-                    <h1 className="text-lg font-bold text-gray-800">Study Tracker</h1>
+                    <h1 className="text-lg font-bold text-gray-800">Crypto Vote</h1>
                     <p className="text-xs text-gray-500">FHEVM Encrypted</p>
                   </div>
                 </div>

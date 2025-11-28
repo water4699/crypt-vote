@@ -5,20 +5,19 @@ import "@nomicfoundation/hardhat-verify";
 import "@typechain/hardhat";
 import "hardhat-deploy";
 import "hardhat-gas-reporter";
-import type { HardhatUserConfig } from "hardhat/config";
 import { vars } from "hardhat/config.js";
 import "solidity-coverage";
 
-// import "./tasks/accounts.js";
-// import "./tasks/FHECounter.js";
-// import "./tasks/EncryptedStudyTracker.js";
+import "./tasks/accounts.ts";
+import "./tasks/FHECounter.ts";
+import "./tasks/EncryptedVotingSystem.ts";
 
 // Run 'npx hardhat vars setup' to see the list of variables that need to be set
 
-const MNEMONIC: string = vars.get("MNEMONIC", "test test test test test test test test test test test junk");
-const INFURA_API_KEY: string = vars.get("INFURA_API_KEY", "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+const MNEMONIC = vars.get("MNEMONIC", "test test test test test test test test test test test junk");
+const INFURA_API_KEY = vars.get("INFURA_API_KEY", "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
 
-const config: HardhatUserConfig = {
+const config = {
   defaultNetwork: "hardhat",
   namedAccounts: {
     deployer: 0,
@@ -70,10 +69,10 @@ const config: HardhatUserConfig = {
     },
     sepolia: {
       accounts: [
-        "0x" + "7bcbe27ab27a2abae41389d8e5c77874fec3cff61e19d0125c0e78ee3f8bbbcf"
+        "0x" + "742a20f19d8776d8af6eff10fd9ee16ef167843b02af93003c33ef300c308d9d"
       ],
       chainId: 11155111,
-      url: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
+      url: `https://sepolia.infura.io/v3/b18fb7e6ca7045ac83c41157ab93f990`,
     },
   },
   paths: {
@@ -105,4 +104,4 @@ const config: HardhatUserConfig = {
   },
 };
 
-export default config;
+module.exports = config;

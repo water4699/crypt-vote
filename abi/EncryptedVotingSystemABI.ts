@@ -3,7 +3,7 @@
   This file is auto-generated.
   Command: 'npm run genabi'
 */
-export const EncryptedStudyTrackerABI = {
+export const EncryptedVotingSystemABI = {
   "abi": [
     {
       "anonymous": false,
@@ -11,152 +11,20 @@ export const EncryptedStudyTrackerABI = {
         {
           "indexed": true,
           "internalType": "address",
-          "name": "user",
+          "name": "voter",
           "type": "address"
         },
         {
           "indexed": false,
           "internalType": "bool",
-          "name": "success",
-          "type": "bool"
-        }
-      ],
-      "name": "DebugFHEConversion",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "bool",
-          "name": "isInitialized",
-          "type": "bool"
-        }
-      ],
-      "name": "DebugGetDaily",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "bool",
-          "name": "isInitialized",
-          "type": "bool"
-        }
-      ],
-      "name": "DebugGetTotal",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "bool",
-          "name": "wasInitialized",
+          "name": "hasVoted",
           "type": "bool"
         },
         {
           "indexed": false,
-          "internalType": "bool",
-          "name": "isNewDay",
-          "type": "bool"
-        }
-      ],
-      "name": "DebugRecordDaily",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "currentDate",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "lastDate",
-          "type": "uint256"
-        }
-      ],
-      "name": "DebugRecordStart",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "bool",
-          "name": "wasInitialized",
-          "type": "bool"
-        }
-      ],
-      "name": "DebugRecordTotal",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "bool",
-          "name": "dailyInitialized",
-          "type": "bool"
-        },
-        {
-          "indexed": false,
-          "internalType": "bool",
-          "name": "totalInitialized",
-          "type": "bool"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "lastDate",
-          "type": "uint256"
+          "internalType": "uint32",
+          "name": "currentVote",
+          "type": "uint32"
         }
       ],
       "name": "DebugState",
@@ -168,23 +36,42 @@ export const EncryptedStudyTrackerABI = {
         {
           "indexed": true,
           "internalType": "address",
-          "name": "user",
+          "name": "voter",
           "type": "address"
         },
         {
           "indexed": false,
           "internalType": "uint32",
-          "name": "decryptedTime",
+          "name": "optionId",
           "type": "uint32"
         },
         {
           "indexed": false,
           "internalType": "bool",
-          "name": "isDaily",
+          "name": "hasVotedBefore",
           "type": "bool"
         }
       ],
-      "name": "StudyTimeDecrypted",
+      "name": "DebugVote",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "optionId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "description",
+          "type": "string"
+        }
+      ],
+      "name": "OptionAdded",
       "type": "event"
     },
     {
@@ -193,106 +80,80 @@ export const EncryptedStudyTrackerABI = {
         {
           "indexed": true,
           "internalType": "address",
-          "name": "user",
+          "name": "voter",
           "type": "address"
         },
         {
           "indexed": false,
+          "internalType": "uint32",
+          "name": "optionId",
+          "type": "uint32"
+        }
+      ],
+      "name": "VoteCast",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "voter",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "decryptedVote",
+          "type": "uint32"
+        }
+      ],
+      "name": "VoteDecrypted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [],
+      "name": "VotingEnded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
           "internalType": "uint256",
-          "name": "date",
+          "name": "endTime",
           "type": "uint256"
         }
       ],
-      "name": "StudyTimeRecorded",
+      "name": "VotingStarted",
       "type": "event"
     },
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        }
-      ],
-      "name": "debugDailyInitialized",
-      "outputs": [
+          "internalType": "uint32",
+          "name": "optionId",
+          "type": "uint32"
+        },
         {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
+          "internalType": "bytes",
+          "name": "inputProof",
+          "type": "bytes"
         }
       ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        }
-      ],
-      "name": "debugLastStudyDate",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        }
-      ],
-      "name": "debugTotalInitialized",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "view",
+      "name": "castVote",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [],
-      "name": "getCurrentDate",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        }
-      ],
-      "name": "getDailyStudyTime",
-      "outputs": [
-        {
-          "internalType": "uint32",
-          "name": "",
-          "type": "uint32"
-        }
-      ],
-      "stateMutability": "view",
+      "name": "endVoting",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -307,51 +168,21 @@ export const EncryptedStudyTrackerABI = {
       "outputs": [
         {
           "internalType": "bool",
-          "name": "dailyInit",
+          "name": "hasVoted",
           "type": "bool"
         },
         {
-          "internalType": "bool",
-          "name": "totalInit",
-          "type": "bool"
-        },
-        {
-          "internalType": "uint256",
-          "name": "lastDate",
-          "type": "uint256"
+          "internalType": "uint32",
+          "name": "votedOption",
+          "type": "uint32"
         }
       ],
       "stateMutability": "view",
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        }
-      ],
-      "name": "getLastStudyDate",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        }
-      ],
-      "name": "getTotalStudyTime",
+      "inputs": [],
+      "name": "getOptionCount",
       "outputs": [
         {
           "internalType": "uint32",
@@ -365,22 +196,132 @@ export const EncryptedStudyTrackerABI = {
     {
       "inputs": [
         {
-          "internalType": "uint256",
-          "name": "studyTimeEuint32",
-          "type": "uint256"
-        },
-        {
-          "internalType": "bytes",
-          "name": "inputProof",
-          "type": "bytes"
+          "internalType": "uint32",
+          "name": "optionId",
+          "type": "uint32"
         }
       ],
-      "name": "recordStudyTime",
+      "name": "getOptionDescription",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getTotalVotes",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "getUserVote",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "optionId",
+          "type": "uint32"
+        }
+      ],
+      "name": "getVoteCount",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getVotingEndTime",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "hasVoted",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string[]",
+          "name": "optionDescriptions",
+          "type": "string[]"
+        }
+      ],
+      "name": "initializeVoting",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "isVotingActive",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -388,7 +329,7 @@ export const EncryptedStudyTrackerABI = {
           "type": "uint256"
         }
       ],
-      "name": "requestDecryptDaily",
+      "name": "requestDecryptVote",
       "outputs": [
         {
           "internalType": "uint32",
@@ -407,14 +348,21 @@ export const EncryptedStudyTrackerABI = {
           "type": "uint256"
         }
       ],
-      "name": "requestDecryptTotal",
+      "name": "requestDecryptResults",
       "outputs": [
         {
-          "internalType": "uint32",
+          "internalType": "uint32[]",
           "name": "",
-          "type": "uint32"
+          "type": "uint32[]"
         }
       ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "resetVoting",
+      "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     }

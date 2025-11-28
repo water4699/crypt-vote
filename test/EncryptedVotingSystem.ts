@@ -1,6 +1,6 @@
 import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
 import { ethers, fhevm } from "hardhat";
-import { EncryptedStudyTracker, EncryptedStudyTracker__factory } from "../types";
+import { EncryptedVotingSystem, EncryptedVotingSystem__factory } from "../types";
 import { expect } from "chai";
 import { FhevmType } from "@fhevm/hardhat-plugin";
 
@@ -8,24 +8,30 @@ type Signers = {
   deployer: HardhatEthersSigner;
   alice: HardhatEthersSigner;
   bob: HardhatEthersSigner;
+  charlie: HardhatEthersSigner;
 };
 
 async function deployFixture() {
-  const factory = (await ethers.getContractFactory("EncryptedStudyTracker")) as EncryptedStudyTracker__factory;
-  const studyTrackerContract = (await factory.deploy()) as EncryptedStudyTracker;
-  const studyTrackerContractAddress = await studyTrackerContract.getAddress();
+  const factory = (await ethers.getContractFactory("EncryptedVotingSystem")) as EncryptedVotingSystem__factory;
+  const votingSystemContract = (await factory.deploy()) as EncryptedVotingSystem;
+  const votingSystemContractAddress = await votingSystemContract.getAddress();
 
-  return { studyTrackerContract, studyTrackerContractAddress };
+  return { votingSystemContract, votingSystemContractAddress };
 }
 
-describe("EncryptedStudyTracker", function () {
+describe("EncryptedVotingSystem", function () {
   let signers: Signers;
-  let studyTrackerContract: EncryptedStudyTracker;
-  let studyTrackerContractAddress: string;
+  let votingSystemContract: EncryptedVotingSystem;
+  let votingSystemContractAddress: string;
 
   before(async function () {
     const ethSigners: HardhatEthersSigner[] = await ethers.getSigners();
-    signers = { deployer: ethSigners[0], alice: ethSigners[1], bob: ethSigners[2] };
+    signers = {
+      deployer: ethSigners[0],
+      alice: ethSigners[1],
+      bob: ethSigners[2],
+      charlie: ethSigners[3]
+    };
   });
 
   beforeEach(async function () {
@@ -35,17 +41,71 @@ describe("EncryptedStudyTracker", function () {
       this.skip();
     }
 
-    ({ studyTrackerContract, studyTrackerContractAddress } = await deployFixture());
+    ({ votingSystemContract, votingSystemContractAddress } = await deployFixture());
   });
 
-  it("encrypted study times should be uninitialized after deployment", async function () {
-    const encryptedDailyTime = await studyTrackerContract.getDailyStudyTime();
-    const encryptedTotalTime = await studyTrackerContract.getTotalStudyTime();
+  it("should initialize voting with options", async function () {
+    const options = ["Option A", "Option B", "Option C"];
+    await votingSystemContract.initializeVoting(options);
 
-    // Expect initial study times to be bytes32(0) after deployment,
-    // (meaning the encrypted study time values are uninitialized)
-    expect(encryptedDailyTime).to.eq(ethers.ZeroHash);
-    expect(encryptedTotalTime).to.eq(ethers.ZeroHash);
+    const optionCount = await votingSystemContract.getOptionCount();
+    expect(optionCount).to.eq(3);
+
+    for (let i = 0; i < options.length; i++) {
+      const description = await votingSystemContract.getOptionDescription(i);
+      expect(description).to.eq(options[i]);
+    }
+  });
+
+  it("should allow users to cast votes", async function () {
+    const options = ["Option A", "Option B"];
+    await votingSystemContract.initializeVoting(options);
+
+    // Alice votes for option 0
+    await votingSystemContract.connect(signers.alice).castVote(0, "0x00");
+
+    const voteCount0 = await votingSystemContract.getVoteCount(0);
+    const voteCount1 = await votingSystemContract.getVoteCount(1);
+    const totalVotes = await votingSystemContract.getTotalVotes();
+
+    expect(voteCount0).to.eq(1);
+    expect(voteCount1).to.eq(0);
+    expect(totalVotes).to.eq(1);
+  });
+
+  it("should prevent double voting", async function () {
+    const options = ["Option A", "Option B"];
+    await votingSystemContract.initializeVoting(options);
+
+    // Alice votes for option 0
+    await votingSystemContract.connect(signers.alice).castVote(0, "0x00");
+
+    // Alice tries to vote again - should fail
+    await expect(
+      votingSystemContract.connect(signers.alice).castVote(1, "0x00")
+    ).to.be.revertedWith("Already voted");
+  });
+
+  it("should track multiple votes correctly", async function () {
+    const options = ["Option A", "Option B"];
+    await votingSystemContract.initializeVoting(options);
+
+    // Alice votes for option 0
+    await votingSystemContract.connect(signers.alice).castVote(0, "0x00");
+
+    // Bob votes for option 1
+    await votingSystemContract.connect(signers.bob).castVote(1, "0x00");
+
+    // Charlie votes for option 0
+    await votingSystemContract.connect(signers.charlie).castVote(0, "0x00");
+
+    const voteCount0 = await votingSystemContract.getVoteCount(0);
+    const voteCount1 = await votingSystemContract.getVoteCount(1);
+    const totalVotes = await votingSystemContract.getTotalVotes();
+
+    expect(voteCount0).to.eq(2);
+    expect(voteCount1).to.eq(1);
+    expect(totalVotes).to.eq(3);
   });
 
   it("should record daily study time and accumulate total study time", async function () {

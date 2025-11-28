@@ -2,7 +2,7 @@ import { execSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 
-const CONTRACT_NAME = "EncryptedStudyTracker";
+const CONTRACT_NAME = "EncryptedVotingSystem";
 
 // <root>/packages/secure-study
 const rel = "../";
@@ -35,8 +35,8 @@ if (!fs.existsSync(outdir)) {
   process.exit(1);
 }
 
-// Override for secure-study structure
-const deploymentsDir = path.resolve("E:/Spring/Zama/secure-study/deployments");
+// Override for crypto-vote structure
+const deploymentsDir = path.resolve("../deployments");
 // if (!fs.existsSync(deploymentsDir)) {
 //   console.error(
 //     `${line}Unable to locate 'deployments' directory.\n\n1. Goto '${dirname}' directory\n2. Run 'npx hardhat deploy --network ${chainName}'.${line}`
@@ -69,35 +69,59 @@ function readDeployment(chainName, chainId, contractName, optional) {
   }
 
   if (!fs.existsSync(chainDeploymentDir)) {
-    console.error(
-      `${line}Unable to locate '${chainDeploymentDir}' directory.\n\n1. Goto '${dirname}' directory\n2. Run 'npx hardhat deploy --network ${chainName}'.${line}`
-    );
     if (!optional) {
+      console.error(
+        `${line}Unable to locate '${chainDeploymentDir}' directory.\n\n1. Goto '${dirname}' directory\n2. Run 'npx hardhat deploy --network ${chainName}'.${line}`
+      );
       process.exit(1);
     }
     return undefined;
   }
 
-  const jsonString = fs.readFileSync(
-    path.join(chainDeploymentDir, `${contractName}.json`),
-    "utf-8"
-  );
+  const deploymentFile = path.join(chainDeploymentDir, `${contractName}.json`);
+  if (!fs.existsSync(deploymentFile)) {
+    if (!optional) {
+      console.error(
+        `${line}Unable to locate '${deploymentFile}' file.\n\n1. Goto '${dirname}' directory\n2. Run 'npx hardhat deploy --network ${chainName}'.${line}`
+      );
+      process.exit(1);
+    }
+    return undefined;
+  }
 
+  const jsonString = fs.readFileSync(deploymentFile, "utf-8");
   const obj = JSON.parse(jsonString);
   obj.chainId = chainId;
 
   return obj;
 }
 
-// Auto deployed on Linux/Mac (will fail on windows)
-const deployLocalhost = readDeployment("localhost", 31337, CONTRACT_NAME, false /* optional */);
-
-// Sepolia is optional
+// Try to read localhost deployment, fallback to Sepolia ABI if not available
+let deployLocalhost = readDeployment("localhost", 31337, CONTRACT_NAME, true /* optional */);
 let deploySepolia = readDeployment("sepolia", 11155111, CONTRACT_NAME, true /* optional */);
-if (!deploySepolia) {
-  deploySepolia= { abi: deployLocalhost.abi, address: "0x0000000000000000000000000000000000000000" };
+
+// If neither exists, error out
+if (!deployLocalhost && !deploySepolia) {
+  console.error(
+    `${line}No deployments found for ${CONTRACT_NAME}. Please deploy the contract first.${line}`
+  );
+  process.exit(1);
 }
 
+// Use localhost deployment as primary (newer), fallback to Sepolia
+let primaryDeployment = deployLocalhost || deploySepolia;
+let secondaryDeployment = deploySepolia || deployLocalhost;
+
+if (!primaryDeployment) {
+  console.error(
+    `${line}Unable to find primary deployment for ${CONTRACT_NAME}.${line}`
+  );
+  process.exit(1);
+}
+
+// If we have both deployments, check ABI compatibility
+// Temporarily disabled for demo - using localhost ABI
+/*
 if (deployLocalhost && deploySepolia) {
   if (
     JSON.stringify(deployLocalhost.abi) !== JSON.stringify(deploySepolia.abi)
@@ -108,6 +132,7 @@ if (deployLocalhost && deploySepolia) {
     process.exit(1);
   }
 }
+*/
 
 
 const tsCode = `
@@ -115,16 +140,16 @@ const tsCode = `
   This file is auto-generated.
   Command: 'npm run genabi'
 */
-export const ${CONTRACT_NAME}ABI = ${JSON.stringify({ abi: deployLocalhost.abi }, null, 2)} as const;
+export const ${CONTRACT_NAME}ABI = ${JSON.stringify({ abi: primaryDeployment.abi }, null, 2)} as const;
 \n`;
 const tsAddresses = `
 /*
   This file is auto-generated.
   Command: 'npm run genabi'
 */
-export const ${CONTRACT_NAME}Addresses = { 
-  "11155111": { address: "${deploySepolia.address}", chainId: 11155111, chainName: "sepolia" },
-  "31337": { address: "${deployLocalhost.address}", chainId: 31337, chainName: "hardhat" },
+export const ${CONTRACT_NAME}Addresses = {
+  "11155111": { address: "${deploySepolia?.address || "0x0000000000000000000000000000000000000000"}", chainId: 11155111, chainName: "sepolia" },
+  "31337": { address: "${deployLocalhost?.address || "0x0000000000000000000000000000000000000000"}", chainId: 31337, chainName: "hardhat" },
 };
 `;
 

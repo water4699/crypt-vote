@@ -1,4 +1,3 @@
-
 /*
   This file is auto-generated.
   Command: 'npm run genabi'
@@ -6,67 +5,24 @@
 export const FHECounterABI = {
   "abi": [
     {
-      "inputs": [
-        {
-          "internalType": "externalEuint32",
-          "name": "inputEuint32",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "bytes",
-          "name": "inputProof",
-          "type": "bytes"
-        }
-      ],
-      "name": "decrement",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "inputs": [],
-      "name": "getCount",
+      "name": "count",
       "outputs": [
         {
-          "internalType": "euint32",
+          "internalType": "uint32",
           "name": "",
-          "type": "bytes32"
+          "type": "uint32"
         }
       ],
       "stateMutability": "view",
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "externalEuint32",
-          "name": "inputEuint32",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "bytes",
-          "name": "inputProof",
-          "type": "bytes"
-        }
-      ],
+      "inputs": [],
       "name": "increment",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "protocolId",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "pure",
-      "type": "function"
     }
   ]
 } as const;
-

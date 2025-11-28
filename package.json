@@ -1,6 +1,6 @@
 {
-  "name": "secure-study",
-  "description": "Encrypted Study Tracker - Privacy-preserving learning time recording with FHEVM",
+  "name": "crypto-vote",
+  "description": "Encrypted Voting System - Privacy-preserving voting platform with FHEVM",
   "version": "0.1.0",
   "engines": {
     "node": ">=20",
@@ -9,7 +9,6 @@
   "license": "BSD-3-Clause-Clear",
   "homepage": "https://github.com/zama-ai/fhevm-hardhat-template/README.md",
   "repository": {
-    "type": "git",
     "url": "git+https://github.com/zama-ai/fhevm-hardhat-template.git"
   },
   "keywords": [
@@ -24,9 +23,10 @@
     "hardhat"
   ],
   "dependencies": {
-    "encrypted-types": "^0.0.4",
     "@fhevm/solidity": "^0.8.0",
-    "@zama-fhe/oracle-solidity": "^0.1.0"
+    "@zama-fhe/oracle-solidity": "^0.1.0",
+    "encrypted-types": "^0.0.4",
+    "idb": "^8.0.3"
   },
   "devDependencies": {
     "@fhevm/hardhat-plugin": "^0.1.0",
@@ -82,6 +82,8 @@
     "local-node": "hardhat node",
     "deploy-local": "hardhat deploy --network localhost",
     "deploy-sepolia": "hardhat deploy --network sepolia",
+    "setup-voting": "node scripts/setup-voting.mjs",
+    "setup-voting:custom": "node scripts/setup-voting.mjs",
     "frontend-dev": "cd frontend && npm run dev"
   },
   "overrides": {
@@ -101,5 +103,6 @@
     "axios@<0.29.1": ">=0.29.1",
     "cookie@<0.7.0": ">=0.7.0",
     "minimatch": "^3.1.2"
-  }
+  },
+  "type": "module"
 }

@@ -1,7 +1,6 @@
-import { DeployFunction } from "hardhat-deploy/types";
-import { HardhatRuntimeEnvironment } from "hardhat/types";
+import type { HardhatRuntimeEnvironment } from "hardhat/types.js";
 
-const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+const func = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
@@ -12,13 +11,14 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   });
   console.log(`FHECounter contract: `, deployedFHECounter.address);
 
-  // Deploy EncryptedStudyTracker
-  const deployedStudyTracker = await deploy("EncryptedStudyTracker", {
+  // Deploy EncryptedVotingSystem
+  const deployedVotingSystem = await deploy("EncryptedVotingSystem", {
     from: deployer,
     log: true,
   });
-  console.log(`EncryptedStudyTracker contract: `, deployedStudyTracker.address);
+  console.log(`EncryptedVotingSystem contract: `, deployedVotingSystem.address);
 };
-export default func;
 func.id = "deploy_contracts"; // id required to prevent reexecution
-func.tags = ["FHECounter", "EncryptedStudyTracker"];
+func.tags = ["FHECounter", "EncryptedVotingSystem"];
+
+export default func;
