@@ -5,8 +5,8 @@ import type {
   FhevmLoadSDKType,
   FhevmWindowType,
 } from "./fhevmTypes";
-import { isFhevmWindowType, RelayerSDKLoader } from "../RelayerSDKLoader";
-import { publicKeyStorageGet, publicKeyStorageSet } from "../PublicKeyStorage";
+import { isFhevmWindowType, RelayerSDKLoader } from "./RelayerSDKLoader";
+import { publicKeyStorageGet, publicKeyStorageSet } from "./PublicKeyStorage";
 import { FhevmInstance, FhevmInstanceConfig } from "../fhevmTypes";
 
 export class FhevmReactError extends Error {
