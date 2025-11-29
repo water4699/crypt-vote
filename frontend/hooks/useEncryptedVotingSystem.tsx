@@ -476,7 +476,8 @@ export function useEncryptedVotingSystem(contractAddress: string | undefined): U
 
         setMessage(`Voting results decrypted successfully.`);
 
-        return userVoteOption;
+        // Return the decrypted user vote
+        return userVoteHandle ? Number(decryptedResult[userVoteHandle] || 0) : 0;
       } catch (error: any) {
         console.error("[useEncryptedVotingSystem] Error decrypting vote:", error);
         const errorMessage = error.message || String(error);
