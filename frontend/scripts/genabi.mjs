@@ -140,7 +140,7 @@ const tsCode = `
   This file is auto-generated.
   Command: 'npm run genabi'
 */
-export const ${CONTRACT_NAME}ABI = ${JSON.stringify({ abi: primaryDeployment.abi }, null, 2)} as const;
+export const ${CONTRACT_NAME}ABI = ${JSON.stringify(primaryDeployment.abi, null, 2)} as const;
 \n`;
 const tsAddresses = `
 /*
