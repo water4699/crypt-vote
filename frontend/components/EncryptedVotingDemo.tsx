@@ -113,293 +113,470 @@ export const EncryptedVotingDemo = () => {
 
   if (!isConnected) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 w-full">
-        <div className="text-center space-y-4 max-w-2xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-800">Encrypted Voting System</h2>
-          <p className="text-gray-600 text-xl">
-            Secure and private voting powered by FHEVM (Fully Homomorphic Encryption)
-          </p>
-          <p className="text-gray-500">
-            Connect your wallet to create votes, cast encrypted votes, and decrypt results.
-          </p>
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-900 to-black relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-red-600/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-orange-400/10 to-transparent rounded-full"></div>
+        </div>
+
+        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-8">
+          <div className="text-center space-y-8 max-w-4xl mx-auto">
+            {/* Hero Title */}
+            <div className="space-y-4">
+              <div className="inline-block p-4 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                <h1 className="text-6xl md:text-8xl font-black text-white tracking-wider">
+                  VOTE
+                </h1>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-orange-400 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                ENCRYPTED BALLOT SYSTEM
+              </h2>
+            </div>
+
+            {/* Description */}
+            <div className="space-y-6">
+              <p className="text-xl md:text-2xl text-gray-300 font-light leading-relaxed">
+                🔥 <strong className="text-orange-400">FHEVM-Powered</strong> Privacy Voting Revolution
+              </p>
+              <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                Experience the future of democratic participation with <span className="text-red-400 font-semibold">military-grade encryption</span>.
+                Your vote remains private, your choice remains powerful.
+              </p>
+            </div>
+
+            {/* Visual Elements */}
+            <div className="flex flex-wrap justify-center gap-6 mt-12">
+              <div className="bg-black/40 backdrop-blur-sm border border-orange-500/30 rounded-xl p-6 transform hover:scale-105 transition-all duration-300">
+                <div className="text-4xl mb-2">🔐</div>
+                <p className="text-orange-300 font-semibold">Zero-Knowledge</p>
+                <p className="text-gray-400 text-sm">Your vote stays secret</p>
+              </div>
+              <div className="bg-black/40 backdrop-blur-sm border border-red-500/30 rounded-xl p-6 transform hover:scale-105 transition-all duration-300">
+                <div className="text-4xl mb-2">⚡</div>
+                <p className="text-red-300 font-semibold">Real-Time</p>
+                <p className="text-gray-400 text-sm">Instant verification</p>
+              </div>
+              <div className="bg-black/40 backdrop-blur-sm border border-yellow-500/30 rounded-xl p-6 transform hover:scale-105 transition-all duration-300">
+                <div className="text-4xl mb-2">🚀</div>
+                <p className="text-yellow-300 font-semibold">Blockchain</p>
+                <p className="text-gray-400 text-sm">Immutable records</p>
+              </div>
+            </div>
+
+            {/* Call to Action */}
+            <div className="mt-12">
+              <p className="text-gray-500 text-lg mb-6">
+                ⚠️ Connect your wallet to ignite the voting revolution
+              </p>
+              <div className="inline-block p-1 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl">
+                <div className="bg-black px-8 py-4 rounded-xl">
+                  <p className="text-orange-400 font-bold text-lg">
+                    🔥 Ready to Vote Securely?
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-6 px-4 md:px-6">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl p-6 md:p-8 shadow-xl">
-        <h1 className="text-2xl md:text-3xl font-bold mb-2">
-          🔐 Encrypted Voting System
-        </h1>
-        <p className="text-blue-100 text-sm md:text-base">
-          Create secure votes, cast encrypted ballots, and decrypt results privately using FHEVM
-        </p>
-        {address && (
-          <p className="text-blue-200 text-sm mt-2">
-            Connected: {address.slice(0, 6)}...{address.slice(-4)}
-          </p>
-        )}
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-900 to-black relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-0 left-0 w-full h-full">
+          <div className="absolute top-20 left-20 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-80 h-80 bg-red-600/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+        </div>
       </div>
 
-      {/* Status Messages */}
-      {message && (
-        <div className={`p-4 rounded-lg ${
-          message.includes("Error") || message.includes("Failed")
-            ? "bg-red-50 border border-red-200 text-red-800"
-            : message.includes("success")
-            ? "bg-green-50 border border-green-200 text-green-800"
-            : "bg-blue-50 border border-blue-200 text-blue-800"
-        }`}>
-          {message}
-        </div>
-      )}
-
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - Create Vote */}
-        <div className="lg:col-span-1 space-y-6">
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                <span className="text-white text-xl">➕</span>
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 py-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="inline-block">
+            <div className="bg-gradient-to-r from-orange-500 via-red-600 to-pink-600 p-1 rounded-3xl shadow-2xl">
+              <div className="bg-black/90 backdrop-blur-sm rounded-3xl p-8 md:p-12">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <div className="text-6xl animate-bounce">🔥</div>
+                  <h1 className="text-4xl md:text-6xl font-black text-white tracking-wider bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                    CRYPTO VOTE
+                  </h1>
+                  <div className="text-6xl animate-bounce delay-100">⚡</div>
+                </div>
+                <p className="text-xl md:text-2xl text-gray-300 font-light mb-4">
+                  The Ultimate <span className="text-orange-400 font-bold">Privacy-First</span> Voting Experience
+                </p>
+                {address && (
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 to-red-600 px-6 py-2 rounded-full text-white font-semibold">
+                    <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-sm">
+                      {address.slice(0, 6)}...{address.slice(-4)}
+                    </span>
+                  </div>
+                )}
               </div>
-              <h2 className="text-xl font-bold text-gray-800">Create New Vote</h2>
+            </div>
+          </div>
+        </div>
+
+        {/* Status Messages */}
+        {message && (
+          <div className="mb-8">
+            <div className={`p-6 rounded-2xl backdrop-blur-sm border-2 transform hover:scale-105 transition-all duration-300 ${
+              message.includes("Error") || message.includes("Failed")
+                ? "bg-red-900/50 border-red-500/50 text-red-200 shadow-red-500/20"
+                : message.includes("success")
+                ? "bg-green-900/50 border-green-500/50 text-green-200 shadow-green-500/20"
+                : "bg-orange-900/50 border-orange-500/50 text-orange-200 shadow-orange-500/20"
+            } shadow-2xl`}>
+              <div className="flex items-center gap-3">
+                <div className={`text-2xl ${
+                  message.includes("Error") || message.includes("Failed")
+                    ? "animate-bounce"
+                    : message.includes("success")
+                    ? "animate-pulse"
+                    : "animate-spin"
+                }`}>
+                  {message.includes("Error") || message.includes("Failed") ? "❌" :
+                   message.includes("success") ? "✅" : "⚡"}
+                </div>
+                <span className="font-semibold">{message}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Left Column - Create Vote */}
+        <div className="lg:col-span-4 space-y-8">
+          <div className="bg-black/40 backdrop-blur-sm border-2 border-orange-500/30 rounded-3xl p-8 shadow-2xl transform hover:scale-105 transition-all duration-500">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg">
+                <span className="text-white text-3xl animate-pulse">⚡</span>
+              </div>
+              <div>
+                <h2 className="text-2xl font-black text-white">CREATE VOTE</h2>
+                <p className="text-orange-400 text-sm">Ignite the democratic revolution</p>
+              </div>
             </div>
 
             {!showCreateForm ? (
               <button
                 onClick={() => setShowCreateForm(true)}
-                className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
+                className="w-full bg-gradient-to-r from-orange-500 via-red-600 to-pink-600 text-white px-8 py-4 rounded-2xl font-black text-lg hover:shadow-2xl hover:shadow-orange-500/50 transform hover:scale-105 transition-all duration-300 relative overflow-hidden group"
               >
-                Create Vote
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                <span className="relative flex items-center justify-center gap-3">
+                  <span className="text-2xl animate-bounce">🚀</span>
+                  LAUNCH NEW VOTE
+                  <span className="text-2xl animate-bounce">🔥</span>
+                </span>
               </button>
             ) : (
-              <div className="space-y-4">
-                <input
-                  type="text"
-                  placeholder="Vote Title"
-                  value={newVote.title}
-                  onChange={(e) => setNewVote(prev => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-
-                <textarea
-                  placeholder="Vote Description"
-                  value={newVote.description}
-                  onChange={(e) => setNewVote(prev => ({ ...prev, description: e.target.value }))}
-                  rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-orange-400 font-bold text-sm uppercase tracking-wider">VOTE TITLE</label>
+                  <input
+                    type="text"
+                    placeholder="What shall we decide?"
+                    value={newVote.title}
+                    onChange={(e) => setNewVote(prev => ({ ...prev, title: e.target.value }))}
+                    className="w-full px-4 py-3 bg-black/50 border-2 border-orange-500/30 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20 text-white placeholder-gray-500 font-semibold transition-all duration-300"
+                  />
+                </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Options:</label>
+                  <label className="text-orange-400 font-bold text-sm uppercase tracking-wider">DESCRIPTION</label>
+                  <textarea
+                    placeholder="Describe the decision..."
+                    value={newVote.description}
+                    onChange={(e) => setNewVote(prev => ({ ...prev, description: e.target.value }))}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-black/50 border-2 border-orange-500/30 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20 text-white placeholder-gray-500 font-semibold resize-none transition-all duration-300"
+                  />
+                </div>
+
+                <div className="space-y-4">
+                  <label className="text-orange-400 font-bold text-sm uppercase tracking-wider">OPTIONS</label>
                   {newVote.options.map((option, index) => (
-                    <div key={index} className="flex gap-2">
+                    <div key={index} className="flex gap-3">
                       <input
                         type="text"
-                        placeholder={`Option ${index + 1}`}
+                        placeholder={`Choice ${index + 1}`}
                         value={option}
                         onChange={(e) => updateOption(index, e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        className="flex-1 px-4 py-3 bg-black/50 border-2 border-red-500/30 rounded-xl focus:border-red-400 focus:ring-2 focus:ring-red-500/20 text-white placeholder-gray-500 font-semibold transition-all duration-300"
                       />
                       {newVote.options.length > 2 && (
                         <button
                           onClick={() => removeOption(index)}
-                          className="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                          className="px-4 py-3 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-xl hover:shadow-lg transform hover:scale-110 transition-all duration-300 font-bold"
                         >
-                          ✕
+                          🗑️
                         </button>
                       )}
                     </div>
                   ))}
                   <button
                     onClick={addOption}
-                    className="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-gray-400 hover:text-gray-600"
+                    className="w-full py-3 border-2 border-dashed border-orange-500/50 rounded-xl text-orange-400 hover:border-orange-400 hover:bg-orange-500/10 transition-all duration-300 font-bold flex items-center justify-center gap-2"
                   >
-                    + Add Option
+                    <span className="text-xl">+</span> ADD CHOICE
                   </button>
                 </div>
 
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Duration (days):</label>
+                <div className="space-y-2">
+                  <label className="text-orange-400 font-bold text-sm uppercase tracking-wider">DURATION (DAYS)</label>
                   <input
                     type="number"
                     min="1"
                     max="365"
                     value={newVote.durationDays}
                     onChange={(e) => setNewVote(prev => ({ ...prev, durationDays: parseInt(e.target.value) || 7 }))}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-black/50 border-2 border-orange-500/30 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20 text-white font-semibold transition-all duration-300"
                   />
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-3 pt-4">
                   <button
                     onClick={handleCreateVote}
                     disabled={isLoading}
-                    className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-gradient-to-r from-orange-500 via-red-600 to-pink-600 text-white px-8 py-4 rounded-2xl font-black text-lg hover:shadow-2xl hover:shadow-orange-500/50 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-all duration-300 relative overflow-hidden group"
                   >
-                    {isLoading ? "Creating..." : "Create Vote"}
+                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                    <span className="relative flex items-center justify-center gap-2">
+                      {isLoading ? "⏳" : "🚀"} {isLoading ? "DEPLOYING..." : "LAUNCH VOTE"}
+                    </span>
                   </button>
                   <button
                     onClick={() => setShowCreateForm(false)}
-                    className="px-6 py-3 border border-gray-300 rounded-xl font-semibold hover:bg-gray-50"
+                    className="px-6 py-4 border-2 border-gray-600 rounded-2xl font-bold hover:border-gray-400 text-gray-300 hover:text-white transition-all duration-300 transform hover:scale-105"
                   >
-                    Cancel
+                    CANCEL
                   </button>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Vote Statistics */}
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">System Stats</h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Total Votes:</span>
-                <span className="font-semibold">{votes.length}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Your Votes:</span>
-                <span className="font-semibold">{Object.keys(userVotes).length}</span>
-              </div>
-            </div>
-          </div>
+                      {/* Vote Statistics */}
+                      <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-3xl p-6 shadow-2xl">
+                        <div className="flex items-center gap-3 mb-6">
+                          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg">
+                            <span className="text-white text-xl">📊</span>
+                          </div>
+                          <h3 className="text-xl font-bold text-white">SYSTEM STATS</h3>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="bg-gradient-to-r from-blue-900/50 to-purple-900/50 p-4 rounded-2xl border border-blue-500/30 text-center">
+                            <div className="text-3xl font-black text-blue-400 mb-1">{votes.length}</div>
+                            <div className="text-blue-300 text-sm font-bold uppercase tracking-wider">Total Votes</div>
+                          </div>
+                          <div className="bg-gradient-to-r from-green-900/50 to-emerald-900/50 p-4 rounded-2xl border border-green-500/30 text-center">
+                            <div className="text-3xl font-black text-green-400 mb-1">{Object.keys(userVotes).length}</div>
+                            <div className="text-green-300 text-sm font-bold uppercase tracking-wider">Your Votes</div>
+                          </div>
+                        </div>
+                      </div>
         </div>
 
         {/* Right Column - Vote List & Voting */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-8 space-y-8">
           {/* Active Votes */}
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-800">Active Votes</h2>
+          <div className="bg-black/40 backdrop-blur-sm border-2 border-red-500/30 rounded-3xl p-8 shadow-2xl">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center shadow-lg">
+                  <span className="text-white text-2xl">🎯</span>
+                </div>
+                <div>
+                  <h2 className="text-2xl font-black text-white">ACTIVE VOTES</h2>
+                  <p className="text-red-400 text-sm">Cast your encrypted ballot</p>
+                </div>
+              </div>
               <button
                 onClick={loadVotes}
                 disabled={isLoading}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-2xl font-bold hover:shadow-xl hover:shadow-blue-500/50 transform hover:scale-110 transition-all duration-300"
               >
-                🔄 Refresh
+                <span className="flex items-center gap-2">
+                  🔄 {isLoading ? "LOADING..." : "REFRESH"}
+                </span>
               </button>
             </div>
 
             {votes.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <div className="text-4xl mb-4">📊</div>
-                <p>No active votes yet. Create the first vote!</p>
+              <div className="text-center py-16">
+                <div className="text-8xl mb-6 animate-bounce">🎭</div>
+                <h3 className="text-2xl font-bold text-gray-300 mb-4">No Active Votes Yet</h3>
+                <p className="text-gray-500 text-lg mb-8">Be the first to ignite democracy!</p>
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 to-red-600 px-6 py-3 rounded-2xl text-white font-bold animate-pulse">
+                  <span>⚡</span>
+                  <span>CREATE THE FIRST VOTE</span>
+                  <span>🔥</span>
+                </div>
               </div>
             ) : (
-              <div className="space-y-4">
-                {votes.filter(vote => vote.active).map((vote) => (
-                  <div key={vote.id} className="border border-gray-200 rounded-lg p-4">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h3 className="font-bold text-lg text-gray-800">{vote.title}</h3>
-                        <p className="text-gray-600 text-sm mt-1">{vote.description}</p>
-                        <p className="text-xs text-gray-500 mt-2">
-                          Created by: {vote.creator.slice(0, 6)}...{vote.creator.slice(-4)}
-                        </p>
-                      </div>
-                      <div className="text-right text-xs text-gray-500">
-                        <div>Ends: {new Date(vote.endTime * 1000).toLocaleDateString()}</div>
-                        <div className="text-green-600 font-semibold">Active</div>
-                      </div>
-                    </div>
+              <div className="space-y-6">
+                {votes.filter(vote => vote.active).map((vote, index) => (
+                  <div key={vote.id} className="bg-gradient-to-r from-black/60 to-gray-900/60 backdrop-blur-sm border-2 border-orange-500/20 rounded-3xl p-8 shadow-2xl transform hover:scale-102 transition-all duration-500 relative overflow-hidden group">
+                    {/* Background glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                    {/* Voting Options */}
-                    <div className="mb-4">
-                      <h4 className="font-semibold text-gray-700 mb-2">Select your option:</h4>
-                      <div className="space-y-2">
-                        {vote.options.map((option, index) => (
-                          <label key={index} className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
-                            <input
-                              type="radio"
-                              name={`vote-${vote.id}`}
-                              value={index}
-                              checked={selectedVoteId === vote.id && selectedOption === index}
-                              onChange={() => {
-                                setSelectedVoteId(vote.id);
-                                setSelectedOption(index);
-                              }}
-                              className="w-4 h-4 text-blue-600"
-                            />
-                            <span className="text-gray-700">{option}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Vote Actions */}
-                    <div className="flex gap-2">
-                      {selectedVoteId === vote.id && !userVotes[vote.id] && (
-                        <button
-                          onClick={handleCastVote}
-                          disabled={isLoading}
-                          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg disabled:opacity-50"
-                        >
-                          🗳️ Cast Vote
-                        </button>
-                      )}
-
-                      {userVotes[vote.id] && (
-                        <div className="flex flex-col gap-2">
-                          <div className="flex items-center gap-2 text-green-600">
-                            <span>✅</span>
-                            <span className="font-semibold">Vote Cast</span>
+                    <div className="relative z-10">
+                      <div className="flex items-start justify-between mb-6">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-3">
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center text-white font-bold text-sm">
+                              {index + 1}
+                            </div>
+                            <h3 className="font-black text-2xl text-white">{vote.title}</h3>
                           </div>
-                          {!decryptedResults[vote.id] ? (
-                            <div className="relative">
-                              {/* Locked vote display */}
-                              <div className="flex items-center justify-center p-4 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg">
-                                <div className="text-center">
-                                  <span className="text-2xl">🔒</span>
-                                  <p className="text-gray-600 text-sm mt-1">Vote Encrypted</p>
-                                  <button
-                                    onClick={() => decryptUserVote(vote.id)}
-                                    disabled={isLoading}
-                                    className="mt-2 text-sm bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 disabled:opacity-50"
-                                  >
-                                    🔓 Decrypt Results
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                              <div className="flex items-center gap-2 text-green-700 mb-3">
-                                <span>🔓</span>
-                                <span className="font-semibold">Vote Results Decrypted</span>
-                              </div>
-                              {decryptedResults[vote.id] && decryptedResults[vote.id].length > 0 ? (
-                                <div className="space-y-2">
-                                  <h4 className="font-semibold text-gray-800 text-center mb-2">Final Results:</h4>
-                                  {decryptedResults[vote.id].map((result) => (
-                                    <div key={result.optionId} className="flex justify-between items-center py-1">
-                                      <span className="text-gray-700">{vote.options[result.optionId]}</span>
-                                      <span className="font-bold text-blue-600 bg-blue-100 px-2 py-1 rounded">
-                                        {result.count} vote{result.count !== 1 ? 's' : ''}
-                                      </span>
-                                    </div>
-                                  ))}
-                                  {decryptedUserVotes[vote.id] !== undefined && (
-                                    <div className="mt-3 pt-3 border-t border-green-200">
-                                      <p className="text-center text-green-700 text-sm">
-                                        Your vote: <span className="font-semibold">{vote.options[decryptedUserVotes[vote.id]]}</span>
-                                      </p>
-                                    </div>
-                                  )}
-                                </div>
-                              ) : (
-                                <div className="text-center text-gray-600">
-                                  <p>No results available</p>
-                                </div>
-                              )}
-                            </div>
-                          )}
+                          <p className="text-gray-300 text-lg mb-4 leading-relaxed">{vote.description}</p>
+                          <div className="flex items-center gap-4 text-sm">
+                            <span className="text-gray-500">Creator:</span>
+                            <code className="bg-black/50 px-3 py-1 rounded-lg text-orange-400 font-mono">
+                              {vote.creator.slice(0, 6)}...{vote.creator.slice(-4)}
+                            </code>
+                          </div>
                         </div>
-                      )}
+                        <div className="text-right">
+                          <div className="bg-green-900/50 border border-green-500/30 px-4 py-2 rounded-xl mb-3">
+                            <div className="text-green-400 font-bold text-sm uppercase tracking-wider">ACTIVE</div>
+                            <div className="text-gray-400 text-xs">
+                              Ends: {new Date(vote.endTime * 1000).toLocaleDateString()}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Voting Options */}
+                      <div className="mb-8">
+                        <h4 className="font-bold text-orange-400 mb-4 text-lg uppercase tracking-wider">Choose Your Path:</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {vote.options.map((option, index) => (
+                            <label key={index} className="group cursor-pointer">
+                              <div className={`p-4 rounded-2xl border-2 transition-all duration-300 transform hover:scale-105 ${
+                                selectedVoteId === vote.id && selectedOption === index
+                                  ? "border-orange-400 bg-orange-500/20 shadow-lg shadow-orange-500/30"
+                                  : "border-gray-600 hover:border-orange-400 bg-black/30 hover:bg-orange-500/10"
+                              }`}>
+                                <div className="flex items-center gap-3">
+                                  <input
+                                    type="radio"
+                                    name={`vote-${vote.id}`}
+                                    value={index}
+                                    checked={selectedVoteId === vote.id && selectedOption === index}
+                                    onChange={() => {
+                                      setSelectedVoteId(vote.id);
+                                      setSelectedOption(index);
+                                    }}
+                                    className="w-5 h-5 text-orange-600 bg-black border-2 border-orange-500 focus:ring-orange-500 focus:ring-2"
+                                  />
+                                  <span className={`font-semibold transition-colors ${
+                                    selectedVoteId === vote.id && selectedOption === index
+                                      ? "text-orange-300"
+                                      : "text-gray-300 group-hover:text-orange-200"
+                                  }`}>
+                                    {option}
+                                  </span>
+                                </div>
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Vote Actions */}
+                      <div className="flex gap-4">
+                        {selectedVoteId === vote.id && !userVotes[vote.id] && (
+                          <button
+                            onClick={handleCastVote}
+                            disabled={isLoading}
+                            className="flex-1 bg-gradient-to-r from-orange-500 via-red-600 to-pink-600 text-white px-8 py-4 rounded-2xl font-black text-lg hover:shadow-2xl hover:shadow-orange-500/50 transform hover:scale-105 transition-all duration-300 relative overflow-hidden group"
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                            <span className="relative flex items-center justify-center gap-3">
+                              {isLoading ? "⏳" : "🗳️"} {isLoading ? "CASTING..." : "CAST ENCRYPTED VOTE"}
+                            </span>
+                          </button>
+                        )}
+
+                        {userVotes[vote.id] && (
+                          <div className="w-full space-y-6">
+                            <div className="flex items-center justify-center gap-3 bg-green-900/50 border-2 border-green-500/50 px-6 py-4 rounded-2xl">
+                              <div className="text-3xl animate-bounce">✅</div>
+                              <span className="text-green-400 font-black text-lg">VOTE CAST SUCCESSFULLY</span>
+                            </div>
+
+                            {!decryptedResults[vote.id] ? (
+                              <div className="bg-gradient-to-r from-gray-800 to-black border-2 border-gray-600 rounded-2xl p-8 text-center transform hover:scale-102 transition-all duration-300">
+                                <div className="text-6xl mb-4 animate-pulse">🔒</div>
+                                <h4 className="text-xl font-bold text-gray-300 mb-3">YOUR VOTE IS ENCRYPTED</h4>
+                                <p className="text-gray-500 mb-6">Military-grade privacy protection active</p>
+                                <button
+                                  onClick={() => decryptUserVote(vote.id)}
+                                  disabled={isLoading}
+                                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-2xl font-bold hover:shadow-xl hover:shadow-blue-500/50 transform hover:scale-110 transition-all duration-300"
+                                >
+                                  <span className="flex items-center gap-2">
+                                    {isLoading ? "⏳" : "🔓"} {isLoading ? "DECRYPTING..." : "REVEAL RESULTS"}
+                                  </span>
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="bg-gradient-to-r from-green-900/50 to-emerald-900/50 border-2 border-green-500/50 rounded-2xl p-8">
+                                <div className="flex items-center justify-center gap-3 mb-6">
+                                  <div className="text-4xl animate-spin">🔓</div>
+                                  <h4 className="text-xl font-bold text-green-400">RESULTS DECRYPTED</h4>
+                                </div>
+
+                                {decryptedResults[vote.id] && decryptedResults[vote.id].length > 0 ? (
+                                  <div className="space-y-4">
+                                    <h5 className="text-center font-bold text-white text-lg mb-4">FINAL VOTE TALLY:</h5>
+                                    <div className="grid gap-3">
+                                      {decryptedResults[vote.id].map((result) => (
+                                        <div key={result.optionId} className="flex justify-between items-center bg-black/50 p-4 rounded-xl border border-gray-600">
+                                          <span className="text-gray-300 font-semibold">{vote.options[result.optionId]}</span>
+                                          <div className="bg-gradient-to-r from-orange-600 to-red-600 px-4 py-2 rounded-xl">
+                                            <span className="text-white font-black">
+                                              {result.count} VOTE{result.count !== 1 ? 'S' : ''}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                    {decryptedUserVotes[vote.id] !== undefined && (
+                                      <div className="mt-6 pt-6 border-t-2 border-green-500/30">
+                                        <div className="text-center">
+                                          <p className="text-green-400 text-sm uppercase tracking-wider font-bold mb-2">Your Choice</p>
+                                          <div className="inline-block bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3 rounded-2xl">
+                                            <span className="text-white font-black text-lg">
+                                              {vote.options[decryptedUserVotes[vote.id]]}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div className="text-center text-gray-500 py-8">
+                                    <div className="text-4xl mb-4">📊</div>
+                                    <p className="text-lg">No results data available</p>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                  </div>
                     </div>
                   </div>
                 ))}
@@ -409,34 +586,58 @@ export const EncryptedVotingDemo = () => {
 
           {/* Completed Votes */}
           {votes.filter(vote => !vote.active).length > 0 && (
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Completed Votes</h2>
-              <div className="space-y-4">
-                {votes.filter(vote => !vote.active).map((vote) => (
-                  <div key={vote.id} className="border border-gray-200 rounded-lg p-4">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h3 className="font-bold text-lg text-gray-800">{vote.title}</h3>
-                        <p className="text-gray-600 text-sm mt-1">{vote.description}</p>
+            <div className="bg-black/40 backdrop-blur-sm border-2 border-gray-600 rounded-3xl p-8 shadow-2xl">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center shadow-lg">
+                  <span className="text-white text-2xl">🏁</span>
+                </div>
+                <div>
+                  <h2 className="text-2xl font-black text-white">COMPLETED VOTES</h2>
+                  <p className="text-gray-400 text-sm">Historical voting results</p>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {votes.filter(vote => !vote.active).map((vote, index) => (
+                  <div key={vote.id} className="bg-gradient-to-r from-gray-800/50 to-gray-900/50 border-2 border-gray-600 rounded-2xl p-6 transform hover:scale-102 transition-all duration-300">
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gray-600 to-gray-700 flex items-center justify-center text-white font-bold text-sm">
+                            {index + 1}
+                          </div>
+                          <h3 className="font-bold text-xl text-white">{vote.title}</h3>
+                        </div>
+                        <p className="text-gray-300 text-base mb-3">{vote.description}</p>
+                        <div className="bg-red-900/50 border border-red-500/30 px-4 py-2 rounded-xl inline-block">
+                          <div className="text-red-400 font-bold text-sm uppercase tracking-wider">COMPLETED</div>
+                        </div>
                       </div>
+
                       <button
                         onClick={() => handleDecryptResults(vote.id)}
                         disabled={isLoading}
-                        className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg disabled:opacity-50"
+                        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-2xl font-bold hover:shadow-xl hover:shadow-purple-500/50 transform hover:scale-110 transition-all duration-300"
                       >
-                        🔓 Decrypt Results
+                        <span className="flex items-center gap-2">
+                          {isLoading ? "⏳" : "🔓"} {isLoading ? "DECRYPTING..." : "VIEW RESULTS"}
+                        </span>
                       </button>
                     </div>
 
                     {/* Show decrypted results if available */}
                     {decryptedResults[vote.id] && (
-                      <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                        <h4 className="font-semibold text-gray-800 mb-2">Results:</h4>
-                        <div className="space-y-1">
+                      <div className="bg-gradient-to-r from-black/60 to-gray-900/60 border-2 border-green-500/30 rounded-2xl p-6">
+                        <h4 className="font-bold text-green-400 mb-4 text-lg text-center uppercase tracking-wider">Final Results</h4>
+                        <div className="space-y-3">
                           {decryptedResults[vote.id].map((result) => (
-                            <div key={result.optionId} className="flex justify-between text-sm">
-                              <span>{vote.options[result.optionId]}</span>
-                              <span className="font-bold text-blue-600">{result.count} votes</span>
+                            <div key={result.optionId} className="flex justify-between items-center bg-black/50 p-4 rounded-xl border border-gray-600">
+                              <span className="text-gray-300 font-semibold">{vote.options[result.optionId]}</span>
+                              <div className="bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-2 rounded-xl">
+                                <span className="text-white font-black">
+                                  {result.count} VOTE{result.count !== 1 ? 'S' : ''}
+                                </span>
+                              </div>
                             </div>
                           ))}
                         </div>
