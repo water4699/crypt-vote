@@ -231,7 +231,7 @@ export const EncryptedVotingDemo = () => {
                     {chainId === 31337 ? (
                       <>
                         <li>✅ Current network: <strong>Localhost (Hardhat)</strong> - Correct network</li>
-                        <li>⚠️ But contract address doesn't match, please check:</li>
+                        <li>⚠️ But contract address doesn&apos;t match, please check:</li>
                         <li>Current contract address: <code className="bg-black/50 px-2 py-1 rounded text-red-300">{contractAddress}</code></li>
                         <li>Expected address: <code className="bg-black/50 px-2 py-1 rounded text-green-300">0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512</code></li>
                         <li>Please ensure <code className="bg-black/50 px-2 py-1 rounded">NEXT_PUBLIC_CONTRACT_ADDRESS</code> is removed or commented out in <code className="bg-black/50 px-2 py-1 rounded">.env.local</code></li>
