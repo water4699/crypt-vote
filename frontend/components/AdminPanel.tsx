@@ -14,40 +14,40 @@ export const AdminPanel = () => {
 
   const handleInitializeVoting = async () => {
     if (candidateOptions.length < 2) {
-      alert("请至少添加2个候选人选项");
+      alert("Please add at least 2 candidate options");
       return;
     }
 
     setIsInitializing(true);
     try {
       const title = `Admin Vote ${new Date().toLocaleDateString()}`;
-      const description = "管理员创建的投票";
-      const durationDays = 7; // 默认7天
+      const description = "Vote created by administrator";
+      const durationDays = 7; // Default 7 days
 
       await createVote(title, description, candidateOptions, durationDays);
-      alert("投票创建成功！");
+      alert("Vote created successfully!");
       setCandidateOptions([]);
     } catch (error: unknown) {
-      console.error("创建投票失败:", error);
-      alert(`创建投票失败: ${error instanceof Error ? error.message : '未知错误'}`);
+      console.error("Failed to create vote:", error);
+      alert(`Failed to create vote: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsInitializing(false);
     }
   };
 
   const handleResetVoting = async () => {
-    if (!confirm("确定要重置投票吗？这将清除所有投票数据！")) {
+    if (!confirm("Are you sure you want to reset voting? This will clear all voting data!")) {
       return;
     }
 
     setIsResetting(true);
     try {
-      // 这里需要实现resetVoting函数调用
+      // TODO: Implement resetVoting function call
       // await resetVoting();
-      alert("投票重置成功！");
+      alert("Voting reset successfully!");
     } catch (error: unknown) {
-      console.error("重置投票失败:", error);
-      alert(`重置投票失败: ${error instanceof Error ? error.message : '未知错误'}`);
+      console.error("Failed to reset voting:", error);
+      alert(`Failed to reset voting: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsResetting(false);
     }
@@ -66,23 +66,23 @@ export const AdminPanel = () => {
 
   return (
     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
-      <h2 className="text-xl font-bold text-yellow-800 mb-4">🔧 管理员面板</h2>
+      <h2 className="text-xl font-bold text-yellow-800 mb-4">🔧 Admin Panel</h2>
       <p className="text-sm text-yellow-700 mb-4">
-        合约地址: {contractAddress || "未部署"}
+        Contract Address: {contractAddress || "Not Deployed"}
       </p>
 
       <div className="space-y-4">
-        {/* 添加候选人选项 */}
+        {/* Add candidate options */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            添加候选人选项
+            Add Candidate Options
           </label>
           <div className="flex gap-2">
             <input
               type="text"
               value={newOption}
               onChange={(e) => setNewOption(e.target.value)}
-              placeholder="输入候选人名称"
+              placeholder="Enter candidate name"
               className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
               onKeyPress={(e) => e.key === 'Enter' && addOption()}
             />
@@ -91,16 +91,16 @@ export const AdminPanel = () => {
               className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 disabled:opacity-50"
               disabled={!newOption.trim()}
             >
-              添加
+              Add
             </button>
           </div>
         </div>
 
-        {/* 候选人列表 */}
+        {/* Candidate list */}
         {candidateOptions.length > 0 && (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              候选人列表 ({candidateOptions.length})
+              Candidate List ({candidateOptions.length})
             </label>
             <div className="space-y-2">
               {candidateOptions.map((option, index) => (
@@ -118,14 +118,14 @@ export const AdminPanel = () => {
           </div>
         )}
 
-        {/* 操作按钮 */}
+        {/* Action buttons */}
         <div className="flex gap-3 pt-4 border-t border-yellow-200">
           <button
             onClick={handleInitializeVoting}
             disabled={candidateOptions.length < 2 || isInitializing}
             className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
           >
-            {isInitializing ? "初始化中..." : "初始化投票"}
+            {isInitializing ? "Initializing..." : "Initialize Voting"}
           </button>
 
           <button
@@ -133,7 +133,7 @@ export const AdminPanel = () => {
             disabled={isResetting}
             className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50"
           >
-            {isResetting ? "重置中..." : "重置投票"}
+            {isResetting ? "Resetting..." : "Reset Voting"}
           </button>
         </div>
       </div>

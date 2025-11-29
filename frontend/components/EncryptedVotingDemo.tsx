@@ -1,12 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useEncryptedVotingSystem } from "../hooks/useEncryptedVotingSystem";
-import { useAccount } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
+import { EncryptedVotingSystemAddresses } from "../abi/EncryptedVotingSystemAddresses";
 
 export const EncryptedVotingDemo = () => {
   const { address, isConnected } = useAccount();
-  const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  const chainId = useChainId();
+  
+  // Get contract address based on current chain
+  // Priority: chain-specific address > environment variable > default localhost
+  // Use useMemo to recalculate when chainId changes
+  const contractAddress = useMemo(() => {
+    // First, try to get address from addresses file based on current chain
+    const chainIdStr = chainId.toString();
+    const chainAddress = EncryptedVotingSystemAddresses[chainIdStr as keyof typeof EncryptedVotingSystemAddresses];
+    
+    if (chainAddress) {
+      return chainAddress.address;
+    }
+    
+    // If no chain-specific address found, use environment variable if set
+    if (process.env.NEXT_PUBLIC_CONTRACT_ADDRESS) {
+      return process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+    }
+    
+    // Fallback to localhost address
+    return "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  }, [chainId]);
   const {
     votes,
     userVotes,
@@ -148,32 +170,32 @@ export const EncryptedVotingDemo = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-900 to-black relative overflow-hidden">
+    <div className="min-h-[calc(100vh-200px)] bg-gradient-to-br from-gray-900 via-red-900 to-black relative overflow-hidden">
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-20 left-20 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-80 h-80 bg-red-600/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 py-8">
-        <div className="text-center mb-12">
+      <div className="relative z-10 w-full max-w-[95%] xl:max-w-[1600px] mx-auto px-3 md:px-6 lg:px-8 py-4 md:py-6">
+        <div className="text-center mb-6 md:mb-8">
           <div className="inline-block">
-            <div className="bg-gradient-to-r from-orange-500 via-red-600 to-pink-600 p-1 rounded-3xl shadow-2xl">
-              <div className="bg-black/90 backdrop-blur-sm rounded-3xl p-8 md:p-12">
-                <div className="flex items-center justify-center gap-4 mb-6">
-                  <div className="text-6xl animate-bounce">🔥</div>
-                  <h1 className="text-4xl md:text-6xl font-black text-white tracking-wider bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+            <div className="bg-gradient-to-r from-orange-500 via-red-600 to-pink-600 p-1 rounded-2xl md:rounded-3xl shadow-2xl">
+              <div className="bg-black/90 backdrop-blur-sm rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8">
+                <div className="flex items-center justify-center gap-2 md:gap-4 mb-3 md:mb-4">
+                  <div className="text-3xl md:text-5xl lg:text-6xl animate-bounce">🔥</div>
+                  <h1 className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white tracking-wider bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
                     CRYPTO VOTE
                   </h1>
-                  <div className="text-6xl animate-bounce delay-100">⚡</div>
+                  <div className="text-3xl md:text-5xl lg:text-6xl animate-bounce delay-100">⚡</div>
                 </div>
-                <p className="text-xl md:text-2xl text-gray-300 font-light mb-4">
+                <p className="text-sm md:text-lg lg:text-xl xl:text-2xl text-gray-300 font-light mb-2 md:mb-3">
                   The Ultimate <span className="text-orange-400 font-bold">Privacy-First</span> Voting Experience
                 </p>
                 {address && (
-                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 to-red-600 px-6 py-2 rounded-full text-white font-semibold">
-                    <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-sm">
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 to-red-600 px-4 md:px-6 py-1.5 md:py-2 rounded-full text-white font-semibold text-xs md:text-sm">
+                    <div className="w-2 h-2 md:w-3 md:h-3 bg-green-400 rounded-full animate-pulse"></div>
+                    <span>
                       {address.slice(0, 6)}...{address.slice(-4)}
                     </span>
                   </div>
@@ -184,17 +206,62 @@ export const EncryptedVotingDemo = () => {
         </div>
 
         {message && (
-          <div className="mb-8">
-            <div className="p-6 rounded-2xl backdrop-blur-sm border-2 shadow-2xl text-white font-semibold text-center">
-              {message}
+          <div className="mb-4 md:mb-6">
+            <div className={`p-6 rounded-2xl backdrop-blur-sm border-2 shadow-2xl font-semibold text-center ${
+              message.includes("Error") || message.includes("Failed") || message.includes("not deployed")
+                ? "bg-red-900/50 border-red-500/50 text-red-200"
+                : message.includes("success")
+                ? "bg-green-900/50 border-green-500/50 text-green-200"
+                : "bg-orange-900/50 border-orange-500/50 text-orange-200"
+            }`}>
+              <div className="flex items-center justify-center gap-3 mb-2">
+                {message.includes("Error") || message.includes("Failed") || message.includes("not deployed") ? (
+                  <span className="text-2xl">❌</span>
+                ) : message.includes("success") ? (
+                  <span className="text-2xl">✅</span>
+                ) : (
+                  <span className="text-2xl">⚡</span>
+                )}
+                <span>{message}</span>
+              </div>
+              {message.includes("not deployed") && (
+                <div className="mt-4 text-sm text-gray-300 space-y-2">
+                  <p>💡 <strong>Solutions:</strong></p>
+                  <ul className="list-disc list-inside space-y-1 text-left max-w-2xl mx-auto">
+                    {chainId === 31337 ? (
+                      <>
+                        <li>✅ Current network: <strong>Localhost (Hardhat)</strong> - Correct network</li>
+                        <li>⚠️ But contract address doesn't match, please check:</li>
+                        <li>Current contract address: <code className="bg-black/50 px-2 py-1 rounded text-red-300">{contractAddress}</code></li>
+                        <li>Expected address: <code className="bg-black/50 px-2 py-1 rounded text-green-300">0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512</code></li>
+                        <li>Please ensure <code className="bg-black/50 px-2 py-1 rounded">NEXT_PUBLIC_CONTRACT_ADDRESS</code> is removed or commented out in <code className="bg-black/50 px-2 py-1 rounded">.env.local</code></li>
+                        <li>Or ensure the local Hardhat node is running and the contract is deployed</li>
+                      </>
+                    ) : chainId === 11155111 ? (
+                      <>
+                        <li>Current network: <strong>Sepolia Testnet</strong></li>
+                        <li>Please deploy the contract on Sepolia testnet, or switch to local network</li>
+                        <li>Current contract address: <code className="bg-black/50 px-2 py-1 rounded">{contractAddress}</code></li>
+                      </>
+                    ) : (
+                      <>
+                        <li>Switch to local network (localhost:8545) to use locally deployed contract</li>
+                        <li>Or deploy contract on Sepolia testnet</li>
+                        <li>Current contract address: <code className="bg-black/50 px-2 py-1 rounded">{contractAddress}</code></li>
+                        <li>Current network chain ID: <code className="bg-black/50 px-2 py-1 rounded">{chainId}</code></li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-4 space-y-8">
-            <div className="bg-black/40 backdrop-blur-sm border-2 border-orange-500/30 rounded-3xl p-8 shadow-2xl transform hover:scale-105 transition-all duration-500">
-              <div className="flex items-center gap-4 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 w-full">
+          <div className="lg:col-span-4 space-y-4 md:space-y-6">
+            <div className="bg-black/40 backdrop-blur-sm border-2 border-orange-500/30 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 shadow-2xl transform hover:scale-105 transition-all duration-500">
+              <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg">
                   <span className="text-white text-3xl animate-pulse">⚡</span>
                 </div>
@@ -217,7 +284,7 @@ export const EncryptedVotingDemo = () => {
                   </span>
                 </button>
               ) : (
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-5">
                   <div className="space-y-2">
                     <label className="text-orange-400 font-bold text-sm uppercase tracking-wider">VOTE TITLE</label>
                     <input
@@ -304,9 +371,9 @@ export const EncryptedVotingDemo = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-8 space-y-8">
-            <div className="bg-black/40 backdrop-blur-sm border-2 border-red-500/30 rounded-3xl p-8 shadow-2xl">
-              <div className="flex items-center justify-between mb-8">
+          <div className="lg:col-span-8 space-y-4 md:space-y-6">
+            <div className="bg-black/40 backdrop-blur-sm border-2 border-red-500/30 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 shadow-2xl">
+              <div className="flex items-center justify-between mb-4 md:mb-6">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center shadow-lg">
                     <span className="text-white text-2xl">🎯</span>
@@ -328,10 +395,10 @@ export const EncryptedVotingDemo = () => {
               </div>
 
               {votes.length === 0 ? (
-                <div className="text-center py-16">
-                  <div className="text-8xl mb-6 animate-bounce">🎭</div>
-                  <h3 className="text-2xl font-bold text-gray-300 mb-4">No Active Votes Yet</h3>
-                  <p className="text-gray-500 text-lg mb-8">Be the first to ignite democracy!</p>
+                <div className="text-center py-8 md:py-12 lg:py-16">
+                  <div className="text-6xl md:text-8xl mb-4 md:mb-6 animate-bounce">🎭</div>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-300 mb-2 md:mb-4">No Active Votes Yet</h3>
+                  <p className="text-gray-500 text-base md:text-lg mb-4 md:mb-6 lg:mb-8">Be the first to ignite democracy!</p>
                   <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 to-red-600 px-6 py-3 rounded-2xl text-white font-bold animate-pulse">
                     <span>⚡</span>
                     <span>CREATE THE FIRST VOTE</span>
@@ -339,13 +406,13 @@ export const EncryptedVotingDemo = () => {
                   </div>
                 </div>
               ) : (
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                   {votes.filter(vote => vote.active).map((vote) => (
-                    <div key={vote.id} className="bg-gradient-to-r from-black/60 to-gray-900/60 backdrop-blur-sm border-2 border-orange-500/20 rounded-3xl p-8 shadow-2xl transform hover:scale-102 transition-all duration-500 relative overflow-hidden group">
+                    <div key={vote.id} className="bg-gradient-to-r from-black/60 to-gray-900/60 backdrop-blur-sm border-2 border-orange-500/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 shadow-2xl transform hover:scale-102 transition-all duration-500 relative overflow-hidden group">
                       <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                       <div className="relative z-10">
-                        <div className="flex items-start justify-between mb-6">
+                        <div className="flex items-start justify-between mb-4 md:mb-6">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-3">
                               <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center text-white font-bold text-sm">
@@ -371,8 +438,8 @@ export const EncryptedVotingDemo = () => {
                           </div>
                         </div>
 
-                        <div className="mb-8">
-                          <h4 className="font-bold text-orange-400 mb-4 text-lg uppercase tracking-wider">Choose Your Path:</h4>
+                        <div className="mb-4 md:mb-6">
+                          <h4 className="font-bold text-orange-400 mb-3 md:mb-4 text-base md:text-lg uppercase tracking-wider">Choose Your Path:</h4>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             {vote.options.map((option, index) => (
                               <label key={index} className="group cursor-pointer">
@@ -422,14 +489,14 @@ export const EncryptedVotingDemo = () => {
                           )}
 
                           {userVotes[vote.id] && (
-                            <div className="w-full space-y-6">
+                            <div className="w-full space-y-4 md:space-y-5">
                               <div className="flex items-center justify-center gap-3 bg-green-900/50 border-2 border-green-500/50 px-6 py-4 rounded-2xl">
                                 <div className="text-3xl animate-bounce">✅</div>
                                 <span className="text-green-400 font-black text-lg">VOTE CAST SUCCESSFULLY</span>
                               </div>
 
                               {!decryptedResults[vote.id] ? (
-                                <div className="bg-gradient-to-r from-gray-800 to-black border-2 border-gray-600 rounded-2xl p-8 text-center transform hover:scale-102 transition-all duration-300">
+                                <div className="bg-gradient-to-r from-gray-800 to-black border-2 border-gray-600 rounded-2xl p-4 md:p-6 lg:p-8 text-center transform hover:scale-102 transition-all duration-300">
                                   <div className="text-6xl mb-4 animate-pulse">🔒</div>
                                   <h4 className="text-xl font-bold text-gray-300 mb-3">YOUR VOTE IS ENCRYPTED</h4>
                                   <p className="text-gray-500 mb-6">Military-grade privacy protection active</p>
@@ -444,7 +511,7 @@ export const EncryptedVotingDemo = () => {
                                   </button>
                                 </div>
                               ) : (
-                                <div className="bg-gradient-to-r from-green-900/50 to-emerald-900/50 border-2 border-green-500/50 rounded-2xl p-8">
+                                <div className="bg-gradient-to-r from-green-900/50 to-emerald-900/50 border-2 border-green-500/50 rounded-2xl p-4 md:p-6 lg:p-8">
                                   <div className="flex items-center justify-center gap-3 mb-6">
                                     <div className="text-4xl animate-spin">🔓</div>
                                     <h4 className="text-xl font-bold text-green-400">RESULTS DECRYPTED</h4>
@@ -467,7 +534,7 @@ export const EncryptedVotingDemo = () => {
                                       </div>
                                     </div>
                                   ) : (
-                                    <div className="text-center text-gray-500 py-8">
+                                    <div className="text-center text-gray-500 py-4 md:py-6 lg:py-8">
                                       <div className="text-4xl mb-4">📊</div>
                                       <p className="text-lg">No results data available</p>
                                     </div>

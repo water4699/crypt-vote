@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Encrypted Voting System",
   description: "Privacy-preserving voting platform with FHEVM",
   icons: {
-    icon: "/study-tracker-logo.svg", // TODO: Update to voting logo
+    icon: "/crypto-vote-logo.svg",
   },
 };
 
@@ -19,16 +19,15 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`zama-bg text-foreground antialiased`}>
-        <div className="fixed inset-0 w-full h-full zama-bg z-[-20]"></div>
+      <body className={`text-foreground antialiased`}>
         <main className="flex flex-col min-h-screen">
           <Providers>
-            <nav className="w-full px-4 md:px-6 py-6 bg-white/80 backdrop-blur-sm border-b border-gray-200 shadow-sm">
+            <nav className="w-full px-4 md:px-6 py-6 bg-white/80 backdrop-blur-sm border-b border-gray-200 shadow-sm relative z-50">
               <div className="max-w-7xl mx-auto flex justify-between items-center">
                 <div className="flex items-center gap-3">
                   <Image
-                    src="/study-tracker-logo.svg"
-                    alt="Voting System Logo"
+                    src="/crypto-vote-logo.svg"
+                    alt="Crypto Vote Logo"
                     width={48}
                     height={48}
                     className="rounded-lg"
@@ -41,7 +40,7 @@ export default async function RootLayout({
                 <EnglishConnectButton />
               </div>
             </nav>
-            <div className="flex-1 py-8">
+            <div className="flex-1 w-full">
               {children}
             </div>
           </Providers>

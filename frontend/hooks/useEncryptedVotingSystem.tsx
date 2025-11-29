@@ -156,7 +156,11 @@ export function useEncryptedVotingSystem(contractAddress: string | undefined): U
         // Verify contract is deployed
         const contractCode = await ethersProvider.getCode(contractAddress);
         if (contractCode === "0x" || contractCode.length <= 2) {
-          throw new Error(`Contract not deployed at ${contractAddress}. Please deploy the contract first.`);
+          const network = await ethersProvider.getNetwork();
+          throw new Error(
+            `Contract not deployed at ${contractAddress} on network ${network.name} (chainId: ${network.chainId}). ` +
+            `Please deploy the contract first or switch to a network where the contract is deployed.`
+          );
         }
 
         const contract = new ethers.Contract(contractAddress, EncryptedVotingSystemABI, ethersSigner);
@@ -452,22 +456,25 @@ export function useEncryptedVotingSystem(contractAddress: string | undefined): U
           count: Number(count)
         }));
 
-        // Find user's own vote (assuming it's the first vote, or we need to track it differently)
-        const userVoteHandle = ethers.hexlify(encryptedVotes[0]); // This is a simplification
-        const userVoteOption = Number(decryptedResult[userVoteHandle] || 0);
-
         // Store results
         setDecryptedResults(prev => ({
           ...prev,
           [voteId]: results
         }));
 
-        setDecryptedUserVotes(prev => ({
-          ...prev,
-          [voteId]: userVoteOption
-        }));
+        // Extract user's vote from the decrypted results using the correct user vote handle
+        const userVoteHandle = userVotes[voteId];
+        if (userVoteHandle) {
+          const decryptedVote = Number(decryptedResult[userVoteHandle] || 0);
+          setDecryptedUserVotes(prev => ({
+            ...prev,
+            [voteId]: decryptedVote
+          }));
+        } else {
+          console.warn("[useEncryptedVotingSystem] No user vote handle found for voteId:", voteId);
+        }
 
-        setMessage(`Voting results decrypted successfully. You voted for option ${userVoteOption}.`);
+        setMessage(`Voting results decrypted successfully.`);
 
         return userVoteOption;
       } catch (error: any) {
@@ -488,11 +495,11 @@ export function useEncryptedVotingSystem(contractAddress: string | undefined): U
   const decryptVoteResults = useCallback(
     async (voteId: number): Promise<VoteResult[]> => {
       if (!contractAddress || !ethersProvider || !fhevmInstance || !ethersSigner || !address) {
-        setMessage("Missing requirements for decryption");
+      setMessage("Missing requirements for decryption");
         throw new Error("Missing requirements for decryption");
-      }
+    }
 
-      try {
+    try {
         setMessage("Checking vote status...");
 
         const contract = new ethers.Contract(contractAddress, EncryptedVotingSystemABI, ethersProvider);
@@ -541,66 +548,66 @@ export function useEncryptedVotingSystem(contractAddress: string | undefined): U
           return [];
         }
 
-        // Generate keypair for EIP712 signature
-        let keypair: { publicKey: Uint8Array; privateKey: Uint8Array };
+      // Generate keypair for EIP712 signature
+      let keypair: { publicKey: Uint8Array; privateKey: Uint8Array };
         if (typeof (fhevmInstance as any).generateKeypair === "function") {
           keypair = (fhevmInstance as any).generateKeypair();
-        } else {
-          keypair = {
-            publicKey: new Uint8Array(32).fill(0),
-            privateKey: new Uint8Array(32).fill(0),
-          };
-        }
+      } else {
+        keypair = {
+          publicKey: new Uint8Array(32).fill(0),
+          privateKey: new Uint8Array(32).fill(0),
+        };
+      }
 
         // Create EIP712 signature
         const contractAddresses = [contractAddress as `0x${string}`];
-        const startTimestamp = Math.floor(Date.now() / 1000).toString();
-        const durationDays = "10";
+      const startTimestamp = Math.floor(Date.now() / 1000).toString();
+      const durationDays = "10";
 
-        let eip712: any;
+      let eip712: any;
         if (typeof (fhevmInstance as any).createEIP712 === "function") {
           eip712 = (fhevmInstance as any).createEIP712(
-            keypair.publicKey,
+          keypair.publicKey,
+          contractAddresses,
+          startTimestamp,
+          durationDays
+        );
+      } else {
+        eip712 = {
+          domain: {
+            name: "FHEVM",
+            version: "1",
+            chainId: chainId,
+            verifyingContract: contractAddresses[0],
+          },
+          types: {
+            UserDecryptRequestVerification: [
+              { name: "publicKey", type: "bytes" },
+              { name: "contractAddresses", type: "address[]" },
+              { name: "startTimestamp", type: "string" },
+              { name: "durationDays", type: "string" },
+            ],
+          },
+          message: {
+            publicKey: ethers.hexlify(keypair.publicKey),
             contractAddresses,
             startTimestamp,
-            durationDays
-          );
-        } else {
-          eip712 = {
-            domain: {
-              name: "FHEVM",
-              version: "1",
-              chainId: chainId,
-              verifyingContract: contractAddresses[0],
-            },
-            types: {
-              UserDecryptRequestVerification: [
-                { name: "publicKey", type: "bytes" },
-                { name: "contractAddresses", type: "address[]" },
-                { name: "startTimestamp", type: "string" },
-                { name: "durationDays", type: "string" },
-              ],
-            },
-            message: {
-              publicKey: ethers.hexlify(keypair.publicKey),
-              contractAddresses,
-              startTimestamp,
-              durationDays,
-            },
-          };
-        }
+            durationDays,
+          },
+        };
+      }
 
-        // Sign the EIP712 message
-        const signature = await ethersSigner.signTypedData(
-          eip712.domain,
-          { UserDecryptRequestVerification: eip712.types.UserDecryptRequestVerification },
-          eip712.message
-        );
+      // Sign the EIP712 message
+      const signature = await ethersSigner.signTypedData(
+        eip712.domain,
+        { UserDecryptRequestVerification: eip712.types.UserDecryptRequestVerification },
+        eip712.message
+      );
 
         // For local mock network, remove "0x" prefix from signature
-        const signatureForDecrypt = chainId === 31337
-          ? signature.replace("0x", "")
-          : signature;
+      const signatureForDecrypt = chainId === 31337
+        ? signature.replace("0x", "")
+        : signature;
 
         console.log("[useEncryptedVotingSystem] Decrypting results with:", {
           handleCount: handleContractPairs.length,
@@ -727,7 +734,7 @@ export function useEncryptedVotingSystem(contractAddress: string | undefined): U
       if (error.code === "UNKNOWN_ERROR" || error.code === -32603) {
         if (chainId === 31337) {
           errorMessage = "Cannot connect to Hardhat node. Please ensure 'npx hardhat node' is running on http://localhost:8545";
-        } else {
+      } else {
           errorMessage = `Network error: ${error.message || "Failed to connect to blockchain"}`;
         }
       }

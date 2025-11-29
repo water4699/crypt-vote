@@ -37,13 +37,13 @@ const sepolia = {
 
 // Use RainbowKit config with Sepolia support
 const config = getDefaultConfig({
-  appName: "Encrypted Study Tracker",
+  appName: "Crypto Vote",
   projectId: "ef3325a718834a2b1b4134d3f520933d", // WalletConnect Project ID
   chains: [localhost, sepolia],
   ssr: true,
-  appDescription: "Privacy-preserving learning time tracking with FHEVM",
+  appDescription: "Privacy-preserving encrypted voting system with FHEVM",
   appUrl: "http://localhost:3000",
-  appIcon: "http://localhost:3000/study-tracker-logo.svg",
+  appIcon: "http://localhost:3000/crypto-vote-logo.svg",
 });
 
 const queryClient = new QueryClient({
