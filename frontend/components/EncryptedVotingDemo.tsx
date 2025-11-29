@@ -69,6 +69,29 @@ export const EncryptedVotingDemo = () => {
     }
   };
 
+  const addOption = () => {
+    setNewVote(prev => ({
+      ...prev,
+      options: [...prev.options, ""]
+    }));
+  };
+
+  const removeOption = (index: number) => {
+    if (newVote.options.length > 2) {
+      setNewVote(prev => ({
+        ...prev,
+        options: prev.options.filter((_, i) => i !== index)
+      }));
+    }
+  };
+
+  const updateOption = (index: number, value: string) => {
+    setNewVote(prev => ({
+      ...prev,
+      options: prev.options.map((opt, i) => i === index ? value : opt)
+    }));
+  };
+
   if (!isConnected) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-900 to-black relative overflow-hidden">
@@ -214,6 +237,47 @@ export const EncryptedVotingDemo = () => {
                       onChange={(e) => setNewVote(prev => ({ ...prev, description: e.target.value }))}
                       rows={4}
                       className="w-full px-4 py-3 bg-black/50 border-2 border-orange-500/30 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20 text-white placeholder-gray-500 font-semibold resize-none transition-all duration-300"
+                    />
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="text-orange-400 font-bold text-sm uppercase tracking-wider">OPTIONS</label>
+                    {newVote.options.map((option, index) => (
+                      <div key={index} className="flex gap-3">
+                        <input
+                          type="text"
+                          placeholder={`Choice ${index + 1}`}
+                          value={option}
+                          onChange={(e) => updateOption(index, e.target.value)}
+                          className="flex-1 px-4 py-3 bg-black/50 border-2 border-red-500/30 rounded-xl focus:border-red-400 focus:ring-2 focus:ring-red-500/20 text-white placeholder-gray-500 font-semibold transition-all duration-300"
+                        />
+                        {newVote.options.length > 2 && (
+                          <button
+                            onClick={() => removeOption(index)}
+                            className="px-4 py-3 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-xl hover:shadow-lg transform hover:scale-110 transition-all duration-300 font-bold"
+                          >
+                            🗑️
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    <button
+                      onClick={addOption}
+                      className="w-full py-3 border-2 border-dashed border-orange-500/50 rounded-xl text-orange-400 hover:border-orange-400 hover:bg-orange-500/10 transition-all duration-300 font-bold flex items-center justify-center gap-2"
+                    >
+                      <span className="text-xl">+</span> ADD CHOICE
+                    </button>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-orange-400 font-bold text-sm uppercase tracking-wider">DURATION (DAYS)</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="365"
+                      value={newVote.durationDays}
+                      onChange={(e) => setNewVote(prev => ({ ...prev, durationDays: parseInt(e.target.value) || 7 }))}
+                      className="w-full px-4 py-3 bg-black/50 border-2 border-orange-500/30 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20 text-white font-semibold transition-all duration-300"
                     />
                   </div>
 
