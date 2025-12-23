@@ -94,6 +94,62 @@ export const EncryptedVotingSystemABI = [
   {
     "inputs": [
       {
+        "internalType": "uint256[]",
+        "name": "voteIds",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "externalEuint32[]",
+        "name": "encryptedChoices",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "inputProofs",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "batchCastVotes",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string[]",
+        "name": "titles",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "descriptions",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[][]",
+        "name": "optionsList",
+        "type": "string[][]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "startTimes",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "endTimes",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "batchInitializeVotes",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "voteId",
         "type": "uint256"
@@ -199,6 +255,35 @@ export const EncryptedVotingSystemABI = [
         "internalType": "uint256",
         "name": "voteId",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "expectedParticipants",
+        "type": "uint256"
+      }
+    ],
+    "name": "getParticipationRate",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "participationRate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint32",
+        "name": "actualVotes",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "voteId",
+        "type": "uint256"
       }
     ],
     "name": "getVote",
@@ -256,6 +341,35 @@ export const EncryptedVotingSystemABI = [
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "voteId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getVoteStatistics",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "totalVotes",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "uniqueVoters",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isActive",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -346,6 +460,30 @@ export const EncryptedVotingSystemABI = [
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "voteId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "optionIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "validateVoteOption",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "isValid",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

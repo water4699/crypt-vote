@@ -110,10 +110,10 @@ contract EncryptedVotingSystem is SepoliaConfig {
         // Handle FHE operations based on network
         euint32 optionId;
         if (_isLocalNetwork) {
-            // On local network, simulate FHE operations (no real encryption)
-            // For testing purposes, we'll just create a mock euint32
-            // The actual option value will be stored in the encrypted votes array for later reference
-            optionId = FHE.asEuint32(0); // Use 0 as placeholder, actual value is in encryptedOptionId
+            // On local network, we need to handle the encrypted input differently
+            // Since FHEVM local simulation doesn't actually decrypt, we'll use a workaround
+            // For now, we'll accept that local testing has limitations
+            optionId = FHE.fromExternal(encryptedOptionId, inputProof);
         } else {
             // On Sepolia, use real FHE operations
             optionId = FHE.fromExternal(encryptedOptionId, inputProof);
@@ -241,7 +241,7 @@ contract EncryptedVotingSystem is SepoliaConfig {
         Vote memory voteData = votes[voteId];
         require(voteData.creator != address(0), "Vote does not exist");
 
-        totalVotes = _voteCount[voteId];
+        totalVotes = uint32(_voteCount[voteId]);
         uniqueVoters = totalVotes; // Simplified: assume each vote is from unique voter
         isActive = voteData.active && block.timestamp < voteData.endTime;
 
@@ -281,7 +281,7 @@ contract EncryptedVotingSystem is SepoliaConfig {
             FHE.allowThis(encryptedChoice);
             FHE.allow(encryptedChoice, msg.sender);
 
-            emit VoteCast(voteId, msg.sender, block.timestamp);
+            emit VoteCast(voteId, msg.sender);
         }
     }
 
@@ -315,7 +315,7 @@ contract EncryptedVotingSystem is SepoliaConfig {
         Vote memory voteData = votes[voteId];
         require(voteData.creator != address(0), "Vote does not exist");
 
-        actualVotes = _voteCount[voteId];
+        actualVotes = uint32(_voteCount[voteId]);
         if (expectedParticipants == 0) {
             participationRate = 0;
         } else {

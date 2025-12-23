@@ -21,10 +21,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fhevm/mock-utils": "0.1.0",
     "@rainbow-me/rainbowkit": "^2.1.3",
     "@zama-fhe/relayer-sdk": "0.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.23.26",
     "idb": "^8.0.3",
     "next": "^15.4.2",
     "react": "^18.2.0",

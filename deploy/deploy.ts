@@ -9,6 +9,7 @@ const func = async function (hre: HardhatRuntimeEnvironment) {
     from: deployer,
     log: true,
   });
+  console.log(`EncryptedVotingSystem contract: `, deployedVotingSystem.address);
 };
 func.id = "deploy_contracts"; // id required to prevent reexecution
 func.tags = ["EncryptedVotingSystem"];

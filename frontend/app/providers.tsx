@@ -11,6 +11,7 @@ import {
 import { InMemoryStorageProvider } from "../hooks/useInMemoryStorage";
 import { MetaMaskProvider } from "../hooks/metamask/useMetaMaskProvider";
 import { MetaMaskEthersSignerProvider } from "../hooks/metamask/useMetaMaskEthersSigner";
+import { ThemeProvider } from "../components/theme-provider";
 
 // Local Hardhat network
 const localhost = {
@@ -61,18 +62,20 @@ type Props = {
 
 export function Providers({ children }: Props) {
   return (
-    <MetaMaskProvider>
-      <MetaMaskEthersSignerProvider initialMockChains={{
-        31337: "http://localhost:8545", // Enable mock for local development
-      }}>
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>
-          <InMemoryStorageProvider>{children}</InMemoryStorageProvider>
-        </RainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
-      </MetaMaskEthersSignerProvider>
-    </MetaMaskProvider>
+    <ThemeProvider>
+      <MetaMaskProvider>
+        <MetaMaskEthersSignerProvider initialMockChains={{
+          31337: "http://localhost:8545", // Enable mock for local development
+        }}>
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+          <RainbowKitProvider>
+            <InMemoryStorageProvider>{children}</InMemoryStorageProvider>
+          </RainbowKitProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
+        </MetaMaskEthersSignerProvider>
+      </MetaMaskProvider>
+    </ThemeProvider>
   );
 }

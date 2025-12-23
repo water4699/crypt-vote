@@ -6,11 +6,41 @@
   --zama-yellow: #ffd200;
   --zama-yellow-light: #ffe666;
   --zama-yellow-dark: #e6bd00;
+  
+  /* Theme color variables - will be set by ThemeProvider */
+  --theme-primary: #ff6b35;
+  --theme-secondary: #f7931e;
+  --theme-accent: #ff0080;
+  --theme-background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+  --theme-glass: rgba(255, 255, 255, 0.05);
 }
 
 body {
   background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
   min-height: 100vh;
+}
+
+/* Light theme overrides */
+.light-theme body {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+}
+
+.light-theme .dark-bg {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+}
+
+.light-theme .glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .text-primary {
+  color: #1f2937;
+}
+
+.light-theme .text-secondary {
+  color: #6b7280;
 }
 
 .zama-bg {

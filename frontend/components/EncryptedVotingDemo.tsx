@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useState } from "react";
 import { useEncryptedVotingSystem } from "../hooks/useEncryptedVotingSystem";
 import { useAccount, useChainId } from "wagmi";
 import { EncryptedVotingSystemAddresses } from "../abi/EncryptedVotingSystemAddresses";
+import { ThemeToggle } from "./theme-toggle";
+import { EnglishConnectButton } from "./EnglishConnectButton";
 
 export const EncryptedVotingDemo = () => {
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
-  const [validationError, setValidationError] = useState<string | null>(null);
   
   // Get contract address based on current chain
   // Priority: chain-specific address > environment variable > default localhost
@@ -56,12 +56,12 @@ export const EncryptedVotingDemo = () => {
 
   const handleCreateVote = async () => {
     if (!newVote.title || !newVote.description || newVote.options.some(opt => !opt.trim())) {
-      alert("Please fill in all fields and ensure all options have text");
+      // Validation will be handled by the UI feedback
       return;
     }
 
     try {
-      const voteId = await createVote(
+      await createVote(
         newVote.title,
         newVote.description,
         newVote.options.filter(opt => opt.trim()),
@@ -75,7 +75,7 @@ export const EncryptedVotingDemo = () => {
         durationDays: 7,
       });
       setShowCreateForm(false);
-      alert(`Vote created successfully with ID: ${voteId}`);
+      // Success message is already shown via hook's message system
     } catch (error) {
       console.error("Failed to create vote:", error);
     }
@@ -86,8 +86,9 @@ export const EncryptedVotingDemo = () => {
 
     try {
       await castVote(selectedVoteId, selectedOption);
-      alert("Vote cast successfully!");
-      refreshVote(selectedVoteId);
+      // Refresh the vote and reload all votes to update dashboard
+      await refreshVote(selectedVoteId);
+      await loadVotes(); // Reload all votes to update dashboard data
     } catch (error) {
       console.error("Failed to cast vote:", error);
     }
@@ -139,11 +140,11 @@ export const EncryptedVotingDemo = () => {
             </div>
 
             <div className="space-y-6">
-              <p className="text-xl md:text-2xl text-gray-300 font-light leading-relaxed">
-                🔥 <strong className="text-orange-400">FHEVM-Powered</strong> Privacy Voting Revolution
+              <p className="text-xl md:text-2xl text-gray-200 font-light leading-relaxed drop-shadow-sm">
+                🔥 <strong className="text-orange-400 drop-shadow-sm">FHEVM-Powered</strong> Privacy Voting Revolution
               </p>
-              <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
-                Experience the future of democratic participation with <span className="text-red-400 font-semibold">military-grade encryption</span>.
+              <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed drop-shadow-sm">
+                Experience the future of democratic participation with <span className="text-red-400 font-semibold drop-shadow-sm">military-grade encryption</span>.
                 Your vote remains private, your choice remains powerful.
               </p>
             </div>
@@ -151,19 +152,24 @@ export const EncryptedVotingDemo = () => {
             <div className="flex flex-wrap justify-center gap-6 mt-12">
               <div className="bg-black/40 backdrop-blur-sm border border-orange-500/30 rounded-xl p-6 transform hover:scale-105 transition-all duration-300">
                 <div className="text-4xl mb-2">🔐</div>
-                <p className="text-orange-300 font-semibold">Zero-Knowledge</p>
-                <p className="text-gray-400 text-sm">Your vote stays secret</p>
+                <p className="text-orange-300 font-semibold drop-shadow-sm">Zero-Knowledge</p>
+                <p className="text-gray-300 text-sm drop-shadow-sm">Your vote stays secret</p>
               </div>
               <div className="bg-black/40 backdrop-blur-sm border border-red-500/30 rounded-xl p-6 transform hover:scale-105 transition-all duration-300">
                 <div className="text-4xl mb-2">⚡</div>
-                <p className="text-red-300 font-semibold">Real-Time</p>
-                <p className="text-gray-400 text-sm">Instant verification</p>
+                <p className="text-red-300 font-semibold drop-shadow-sm">Real-Time</p>
+                <p className="text-gray-300 text-sm drop-shadow-sm">Instant verification</p>
               </div>
               <div className="bg-black/40 backdrop-blur-sm border border-yellow-500/30 rounded-xl p-6 transform hover:scale-105 transition-all duration-300">
                 <div className="text-4xl mb-2">🚀</div>
-                <p className="text-yellow-300 font-semibold">Blockchain</p>
-                <p className="text-gray-400 text-sm">Immutable records</p>
+                <p className="text-yellow-300 font-semibold drop-shadow-sm">Blockchain</p>
+                <p className="text-gray-300 text-sm drop-shadow-sm">Immutable records</p>
               </div>
+            </div>
+
+            {/* Connect Wallet Button */}
+            <div className="flex justify-center mt-8">
+              <EnglishConnectButton />
             </div>
           </div>
         </div>
@@ -173,6 +179,7 @@ export const EncryptedVotingDemo = () => {
 
   return (
     <div className="min-h-[calc(100vh-200px)] bg-gradient-to-br from-gray-900 via-red-900 to-black relative overflow-hidden">
+      <ThemeToggle />
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-20 left-20 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-80 h-80 bg-red-600/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
@@ -191,8 +198,8 @@ export const EncryptedVotingDemo = () => {
                   </h1>
                   <div className="text-3xl md:text-5xl lg:text-6xl animate-bounce delay-100">⚡</div>
                 </div>
-                <p className="text-sm md:text-lg lg:text-xl xl:text-2xl text-gray-300 font-light mb-2 md:mb-3">
-                  The Ultimate <span className="text-orange-400 font-bold">Privacy-First</span> Voting Experience
+                <p className="text-sm md:text-lg lg:text-xl xl:text-2xl text-gray-200 font-light mb-2 md:mb-3 drop-shadow-sm">
+                  The Ultimate <span className="text-orange-400 font-bold drop-shadow-sm">Privacy-First</span> Voting Experience
                 </p>
                 {address && (
                   <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 to-red-600 px-4 md:px-6 py-1.5 md:py-2 rounded-full text-white font-semibold text-xs md:text-sm">
@@ -276,19 +283,20 @@ export const EncryptedVotingDemo = () => {
               {!showCreateForm ? (
                 <button
                   onClick={() => setShowCreateForm(true)}
-                  className="w-full bg-gradient-to-r from-orange-500 via-red-600 to-pink-600 text-white px-8 py-4 rounded-2xl font-black text-lg hover:shadow-2xl hover:shadow-orange-500/50 transform hover:scale-105 transition-all duration-300 relative overflow-hidden group"
+                  className="w-full bg-gradient-to-r from-orange-500 via-red-600 to-pink-600 text-white px-8 py-4 rounded-2xl font-black text-lg hover:shadow-2xl hover:shadow-orange-500/50 transform hover:scale-105 transition-all duration-300 relative overflow-hidden group active:scale-95"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
                   <span className="relative flex items-center justify-center gap-3">
-                    <span className="text-2xl animate-bounce">🚀</span>
+                    <span className="text-2xl animate-bounce group-hover:animate-pulse">🚀</span>
                     LAUNCH NEW VOTE
-                    <span className="text-2xl animate-bounce">🔥</span>
+                    <span className="text-2xl animate-bounce group-hover:animate-pulse delay-75">🔥</span>
                   </span>
                 </button>
               ) : (
                 <div className="space-y-4 md:space-y-5">
                   <div className="space-y-2">
-                    <label className="text-orange-400 font-bold text-sm uppercase tracking-wider">VOTE TITLE</label>
+                    <label className="text-orange-300 font-bold text-sm uppercase tracking-wider drop-shadow-sm">VOTE TITLE</label>
                     <input
                       type="text"
                       placeholder="What shall we decide?"
@@ -299,7 +307,7 @@ export const EncryptedVotingDemo = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-orange-400 font-bold text-sm uppercase tracking-wider">DESCRIPTION</label>
+                    <label className="text-orange-300 font-bold text-sm uppercase tracking-wider drop-shadow-sm">DESCRIPTION</label>
                     <textarea
                       placeholder="Describe the decision..."
                       value={newVote.description}
@@ -310,7 +318,7 @@ export const EncryptedVotingDemo = () => {
                   </div>
 
                   <div className="space-y-4">
-                    <label className="text-orange-400 font-bold text-sm uppercase tracking-wider">OPTIONS</label>
+                    <label className="text-orange-300 font-bold text-sm uppercase tracking-wider drop-shadow-sm">OPTIONS</label>
                     {newVote.options.map((option, index) => (
                       <div key={index} className="flex gap-3">
                         <input
@@ -339,7 +347,7 @@ export const EncryptedVotingDemo = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-orange-400 font-bold text-sm uppercase tracking-wider">DURATION (DAYS)</label>
+                    <label className="text-orange-300 font-bold text-sm uppercase tracking-wider drop-shadow-sm">DURATION (DAYS)</label>
                     <input
                       type="number"
                       min="1"
@@ -433,7 +441,7 @@ export const EncryptedVotingDemo = () => {
                           <div className="text-right">
                             <div className="bg-green-900/50 border border-green-500/30 px-4 py-2 rounded-xl mb-3">
                               <div className="text-green-400 font-bold text-sm uppercase tracking-wider">ACTIVE</div>
-                              <div className="text-gray-400 text-xs">
+                              <div className="text-gray-300 text-xs drop-shadow-sm">
                                 Ends: {new Date(vote.endTime * 1000).toLocaleDateString()}
                               </div>
                             </div>
@@ -445,27 +453,37 @@ export const EncryptedVotingDemo = () => {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             {vote.options.map((option, index) => (
                               <label key={index} className="group cursor-pointer">
-                                <div className={`p-4 rounded-2xl border-2 transition-all duration-300 ${
+                                <div className={`p-4 rounded-2xl border-2 transition-all duration-300 transform hover:scale-102 active:scale-98 ${
                                   selectedVoteId === vote.id && selectedOption === index
-                                    ? "border-orange-400 bg-orange-500/20 shadow-lg shadow-orange-500/30"
-                                    : "border-gray-600 hover:border-orange-400 bg-black/30 hover:bg-orange-500/10"
+                                    ? "border-orange-400 bg-orange-500/20 shadow-lg shadow-orange-500/30 ring-2 ring-orange-500/50"
+                                    : "border-gray-600 hover:border-orange-400 bg-black/30 hover:bg-orange-500/10 hover:shadow-lg hover:shadow-orange-500/20"
                                 }`}>
-                                  <div className="flex items-center gap-3">
-                                    <input
-                                      type="radio"
-                                      name={`vote-${vote.id}`}
-                                      value={index}
-                                      checked={selectedVoteId === vote.id && selectedOption === index}
-                                      onChange={() => {
-                                        setSelectedVoteId(vote.id);
-                                        setSelectedOption(index);
-                                      }}
-                                      className="w-5 h-5 text-orange-600 bg-black border-2 border-orange-500 focus:ring-orange-500 focus:ring-2"
-                                    />
-                                    <span className={`font-semibold transition-colors ${
+                                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+                                  <div className="relative z-10 flex items-center gap-3">
+                                    <div className={`w-5 h-5 rounded-full border-2 transition-all duration-300 flex items-center justify-center ${
                                       selectedVoteId === vote.id && selectedOption === index
-                                        ? "text-orange-300"
-                                        : "text-gray-300 group-hover:text-orange-200"
+                                        ? "border-orange-400 bg-orange-500 shadow-lg"
+                                        : "border-orange-500/60 group-hover:border-orange-400 group-hover:shadow-md"
+                                    }`}>
+                                      <input
+                                        type="radio"
+                                        name={`vote-${vote.id}`}
+                                        value={index}
+                                        checked={selectedVoteId === vote.id && selectedOption === index}
+                                        onChange={() => {
+                                          setSelectedVoteId(vote.id);
+                                          setSelectedOption(index);
+                                        }}
+                                        className="w-3 h-3 text-orange-600 bg-transparent border-0 focus:ring-0 opacity-0 absolute"
+                                      />
+                                      {selectedVoteId === vote.id && selectedOption === index && (
+                                        <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                                      )}
+                                    </div>
+                                    <span className={`font-semibold transition-all duration-300 ${
+                                      selectedVoteId === vote.id && selectedOption === index
+                                        ? "text-orange-300 transform scale-105"
+                                        : "text-gray-300 group-hover:text-orange-200 group-hover:transform group-hover:scale-102"
                                     }`}>
                                       {option}
                                     </span>

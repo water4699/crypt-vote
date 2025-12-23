@@ -8,7 +8,6 @@ require("hardhat-gas-reporter");
 require("solidity-coverage");
 
 require("./tasks/accounts.ts");
-require("./tasks/FHECounter.ts");
 require("./tasks/EncryptedVotingSystem.ts");
 
 // Run 'npx hardhat vars setup' to see the list of variables that need to be set

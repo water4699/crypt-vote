@@ -10,7 +10,6 @@ import { vars } from "hardhat/config.js";
 import "solidity-coverage";
 
 import "./tasks/accounts.ts";
-import "./tasks/FHECounter.ts";
 import "./tasks/EncryptedVotingSystem.ts";
 
 // Run 'npx hardhat vars setup' to see the list of variables that need to be set

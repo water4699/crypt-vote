@@ -25,10 +25,21 @@ const nextConfig: NextConfig = {
   },
   // Configure webpack for production builds
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    // Optimize for production builds
-    if (!dev) {
-      // Add any production-specific webpack configurations here
-    }
+    // Ignore React Native modules that MetaMask SDK tries to import
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      '@react-native-async-storage/async-storage': false,
+    };
+    
+    // Ignore warnings about missing modules
+    config.ignoreWarnings = [
+      ...(config.ignoreWarnings || []),
+      {
+        module: /node_modules\/@metamask\/sdk/,
+        message: /Can't resolve '@react-native-async-storage\/async-storage'/,
+      },
+    ];
+    
     return config;
   },
 };
