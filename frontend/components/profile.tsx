@@ -7,8 +7,16 @@ import { useEncryptedVotingSystem } from "../hooks/useEncryptedVotingSystem";
 import { ethers } from "ethers";
 import { EncryptedVotingSystemABI } from "../abi/EncryptedVotingSystemABI";
 
+// Achievement type definition
+type Achievement = {
+  name: string;
+  icon: string;
+  description: string;
+  unlocked: boolean;
+};
+
 // Achievements based on real stats
-const getAchievements = (votesCount: number, createdCount: number) => [
+const getAchievements = (votesCount: number, createdCount: number): Achievement[] => [
   { 
     name: "First Vote", 
     icon: "🎯", 
@@ -35,7 +43,7 @@ const getAchievements = (votesCount: number, createdCount: number) => [
   }
 ];
 
-function AchievementCard({ achievement }: { achievement: typeof mockUserProfile.achievements[0] }) {
+function AchievementCard({ achievement }: { achievement: Achievement }) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -64,7 +72,17 @@ function AchievementCard({ achievement }: { achievement: typeof mockUserProfile.
   );
 }
 
-function VoteHistoryItem({ vote }: { vote: typeof mockVotingHistory[0] }) {
+// Vote history item type
+type VoteHistoryItemType = {
+  id: number;
+  title: string;
+  status: string;
+  votes: number;
+  result: string;
+  date: string;
+};
+
+function VoteHistoryItem({ vote }: { vote: VoteHistoryItemType }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
