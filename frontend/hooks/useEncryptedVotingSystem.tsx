@@ -756,7 +756,7 @@ export function useEncryptedVotingSystem(contractAddress: string | undefined): U
       setIsLoading(true);
 
       // Create a provider - use ethersProvider if available, otherwise create one
-      let provider = ethersProvider;
+      let provider: ethers.Provider | undefined = ethersProvider;
       if (!provider) {
         // Create a new provider based on chainId
         if (chainId === 31337) {
@@ -769,6 +769,12 @@ export function useEncryptedVotingSystem(contractAddress: string | undefined): U
           }
           provider = new ethers.BrowserProvider(walletClient as any) as any;
         }
+      }
+
+      // Ensure provider is defined before proceeding
+      if (!provider) {
+        console.log("[useEncryptedVotingSystem] Provider is still undefined, skipping loadVotes");
+        return;
       }
 
       // Check if we can connect to the provider first
