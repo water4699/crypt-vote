@@ -23,6 +23,8 @@ const nextConfig: NextConfig = {
   experimental: {
     // This helps reduce external API calls
   },
+  // Add empty turbopack config to silence Next.js 16 warning about webpack config
+  turbopack: {},
   // Configure webpack for production builds
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Ignore React Native modules that MetaMask SDK tries to import
