@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
-  "buildCommand": "npm run build:vercel",
+  "buildCommand": "npm run genabi && next build",
   "installCommand": "npm install",
   "functions": {
     "app/**/*.ts": {
